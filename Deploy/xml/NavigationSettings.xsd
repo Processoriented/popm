@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+<!--definiton of Id type-->
+  <xs:simpleType name="recidtype">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9]{3}"/>
+    </xs:restriction>
+</xs:simpleType>
+  
+<!-- definition of attributes -->
+<xs:attribute name="enabled" type="xs:boolean"/>
+<xs:attribute name="collapsed" type="xs:boolean"/>
+<xs:attribute name="ordinal" type="xs:positiveInteger"/>
+<xs:attribute name="recId" type="recidtype"/>
+<xs:attribute name="gID" type="xs:string"/>
+<xs:attribute name="srtDir" type="xs:string"/>
+<xs:attribute name="luElem" type="xs:string"/>
+<xs:attribute name="recListVisible" type="xs:boolean"/>
+<xs:attribute name="luAttr" type="xs:string"/>
+  
+<!-- definition of simple elements -->
+<xs:element name="Name" type="xs:string"/>
+<xs:element name="Icon" type="xs:string"/>
+<xs:element name ="ReferenceURL" type="xs:string"/>
+<xs:element name="RecEle" type="xs:string"/>
+<xs:element name="PrimEle" type="xs:string"/>
+<xs:element name="SecEle" type="xs:string"/>
+<xs:element name="TerEle" type="xs:string"/>
+<xs:element name="FilterEle" type="xs:string"/>
+<xs:element name="SortEle" type="xs:string"/>
+<xs:element name="Description" type="xs:string"/>
+  
+
+  
+<!-- definition of complex elements -->
+<xs:element name="GroupEle">
+  <xs:complexType>
+    <xs:attribute ref="gID" use="required"/>
+    <xs:attribute ref="luElem" use="required"/>
+    <xs:attribute ref="luAttr" use="required"/>
+  </xs:complexType>
+</xs:element>
+
+  <xs:element name="ToolView">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Name" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="Icon" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref ="ReferenceURL" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="RecEle" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="PrimEle" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="SecEle" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="TerEle" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="FilterEle" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="GroupEle" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="SortEle" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+      <xs:attribute ref="enabled" use="required"/>
+      <xs:attribute ref="recId" use="required"/>
+      <xs:attribute ref="ordinal"/>
+   </xs:complexType>
+  </xs:element>
+
+  <xs:element name="NavigationTool">
+    <xs:complexType>
+      <xs:sequence>
+          <xs:element ref="Name" minOccurs="0" maxOccurs="1"/>
+         <xs:element ref="Icon" minOccurs="0" maxOccurs="1"/>
+         <xs:element ref="ToolView" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute ref="enabled" use="required"/>
+      <xs:attribute ref="collapsed" use="required"/>
+      <xs:attribute ref="recId" use="required"/>
+      <xs:attribute ref="ordinal"/>
+      <xs:attribute ref="recListVisible" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="root">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="NavigationTool" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:noNamespaceSchemaLocation="NavigationSettings.xsd" >
+
+  <NavigationTool enabled="true" collapsed="true" recId="100" ordinal="1" recListVisible="true">
+    <Name>Projects</Name>
+    <Icon>img/project.svg</Icon>
+    <ToolView enabled="true"  recId="101" ordinal="1">
+      <Name>Planning</Name>
+      <Icon>img/dashboard.svg</Icon>      
+    </ToolView>
+    <ToolView enabled="true"  recId="102" ordinal="2">
+      <Name>Meetings</Name>
+      <Icon>img/people.svg</Icon>
+    </ToolView>
+    <ToolView enabled="true"  recId="103" ordinal="3">
+      <Name>Deliverables</Name>
+      <Icon>img/file.svg</Icon>
+    </ToolView>
+    <ToolView enabled="true" ordinal="4" recId="104">
+      <Name>Issues</Name>
+      <Icon>img/warning.svg</Icon>
+      <ReferenceURL>xml/issues.xml</ReferenceURL>
+      <RecEle>ROW</RecEle>
+      <PrimEle>SC_SYS_DF_FORM_DOC_ID_ACTION</PrimEle>
+      <SecEle>SC_DF_FIELD_1</SecEle>
+      <TerEle>SC_DF_FIELD_1</TerEle>
+      <FilterEle>SC_DF_FIELD_5</FilterEle>
+      <GroupEle gID="SC_DF_FIELD_7" luElem="HEADER" luAttr="el_values"></GroupEle>
+      <SortEle>SC_DF_FIELD_12</SortEle>
+    </ToolView>
+    <ToolView enabled="true" ordinal="5" recId="105">
+      <Name>Tasks</Name>
+      <Icon>img/task.svg</Icon>
+    </ToolView>
+  </NavigationTool>
+  
+  <NavigationTool enabled="true" collapsed="true" recId="110" ordinal="2" recListVisible="true">
+      <Name>Resources</Name>
+      <Icon>img/key.svg</Icon>
+    <ToolView enabled="true" recId="111" ordinal="1">
+      <Name>People</Name>
+      <Icon>img/person.svg</Icon>
+    </ToolView>
+    <ToolView enabled="true" recId="112" ordinal="2">
+      <Name>Places</Name>
+      <Icon>img/location.svg</Icon>
+    </ToolView>
+    <ToolView enabled="true" recId="113" ordinal="3">
+      <Name>Things</Name>
+      <Icon>img/wrench.svg</Icon>
+    </ToolView>
+  </NavigationTool>
+ 
+  <NavigationTool enabled="true" collapsed="true" recId="120" ordinal="3" recListVisible="false">
+    <Name>Calendar</Name>
+    <Icon>img/calendar.svg</Icon>
+  </NavigationTool>
+ 
+  <NavigationTool enabled="true" collapsed="true" recId="190" ordinal="99" recListVisible="false">
+    <Name>Settings</Name>
+    <Icon>img/cog.svg</Icon>
+  </NavigationTool>
+</root>

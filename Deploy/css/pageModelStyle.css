@@ -1,0 +1,63 @@
+body {
+	font-family: arial, helvetica, sans-serif;
+	margin:0;
+	Position:absolute;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+}
+.appHdr{
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:85%;
+	background-color:#FF0000;
+}
+.container{
+	position:absolute;
+	top:15%;
+	bottom:10%;
+	left:0;
+	right:0;
+	background-color:#C0C0C0;
+}
+.functNav{
+	position:absolute;
+	top:0;
+	bottom:0;
+	left:0;
+	right:90%;
+	background-color:#0000FF;
+}
+.recordNav{
+	position:absolute;
+	top:0;
+	bottom:0;
+	left:10%;
+	right:80%;
+	background-color:#FFFF00;
+}
+.appMain{
+	position:relative;
+	top:0;
+	bottom:0;
+	background-color:#00FFFF;
+}
+.appPalate{
+	position:absolute;
+	top:0;
+	bottom:0;
+	left:90%;
+	right:0;
+	background-color:#FF00FF;
+}
+.appFtr{
+	position:absolute;
+	bottom:0;
+	left:0;
+	right:0;
+	top:90%;
+	background-color:#00FF00;
+}
