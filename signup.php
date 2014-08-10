@@ -4,17 +4,18 @@ require_once 'scripts/app_config.php';
 require_once 'scripts/database_connection.php';
 require_once 'scripts/view.php';
 
-$error_message = $_REQUEST['error_message'];
+$error_message = isset($_REQUEST['error_message']) ? $_REQUEST['error_message'] : NULL;
+$success_message = isset($_REQUEST['success_message']) ? $_REQUEST['success_message'] : NULL;
+$warning_message = isset($_REQUEST['warning_message']) ? $_REQUEST['warning_message'] : NULL;
 
 //get db connection
-$connection = new ConnectdB();
-$connection->connect();
+$conn = con_POPM_dB::getInstance();
 
 //Check to see if the user has already completed the form...
 if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 	//check if the requested username is already in use
-	$username = mysqli_real_escape_string(trim($_REQUEST['username']));
-	$password = mysqli_real_escape_string(trim($_REQUEST['password']));
+	$username = $conn->real_escape_string(trim($_REQUEST['username']));
+	$password = $conn->real_escape_string(trim($_REQUEST['password']));
 
 	$query = sprintf("SELECT username FROM users "
 				. "WHERE username = '%s' "
@@ -22,8 +23,8 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 				, $username
 				, crypt($password, $username));
 
-	if(!$results = $connection->my_conn->query($query)){
-		handle_error('There was an error running the query.', $connection->my_conn->error);
+	if(!$results = $conn->query($query)){
+		handle_error('There was an error running the query.', $conn->error);
 	}
 	//This query should return no results, so if it does, then the user
 	//has created a new profile with the same credentials as before.
@@ -37,14 +38,14 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 		}
 	} else {
 		//Now check if a different user has the same requested username
-		$query = sprintf("SELECT username FROM users "
+		$query = sprintf("SELECT username FROM user "
 						. "WHERE username = '%s' "
 						. "AND password <> '%s';"
 						, $username
 						, crypt($password, $username));
 		$results->free();
-		if(!$results = $connection->my_conn->query($query)){
-			handle_error('There was an error running the query.', $connection->my_conn->error);
+		if(!$results = $conn->query($query)){
+			handle_error('There was an error running the query.', $conn->error);
 		}
 		if ($results->num_rows == 1) {
 			$error_message = "The username {$username} is already in use.";
@@ -130,15 +131,15 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 
 			$insert_sql = sprintf("INSERT INTO users (username,password,bio) "
 							. "VALUES ('%s', '%s', '%s');"
-							, mysqli_real_escape_string($username)
-							, mysqli_real_escape_string(crypt($password, $username))
-							, mysqli_real_escape_string($bio));
+							, $conn->real_escape_string($username)
+							, $conn->real_escape_string(crypt($password, $username))
+							, $conn->real_escape_string($bio));
 							
-			if(!$results = $connection->my_conn->query($insert_sql)){
+			if(!$results = $conn->query($insert_sql)){
 				handle_error('There was an error inserting your profile.'
-					, 'Error Message: ' . $connection->my_conn->error);
+					, 'Error Message: ' . $conn->error);
 			}
-			$iid = $connection->my_conn->insert_id;
+			$iid = $conn->insert_id;
 			if(!$iid > 0) {
 				handle_error('There was an error inserting your profile.'
 					, 'Error Message: No record inserted');
@@ -147,14 +148,14 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 							
 			//Check if there's already a resource with the same email address or social id
 			$sql = sprintf("SELECT id FROM resource WHERE email = '%s' OR ( email IS NULL AND (facebook_id = '%s' OR twitter_id = '%s' OR linkedin_id = '%s'));"
-					, mysqli_real_escape_string($email)
-					, mysqli_real_escape_string($facebook_url)
-					, mysqli_real_escape_string($twitter_url)
-					, mysqli_real_escape_string($linkedin_url));
+					, $conn->real_escape_string($email)
+					, $conn->real_escape_string($facebook_url)
+					, $conn->real_escape_string($twitter_url)
+					, $conn->real_escape_string($linkedin_url));
 			
-			if(!$results = $connection->my_conn->query($sql)){
+			if(!$results = $conn->query($sql)){
 				handle_error('There was an error inserting your profile.'
-					, 'Error Message: ' . $connection->my_conn->error);
+					, 'Error Message: ' . $conn->error);
 			}
 			if ($results->num_rows > 0) {
 				$sql = sprintf("UPDATE resource "
@@ -166,13 +167,13 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 						. ",twitter_id = '%s' "
 						. ",linkedin_id = '%s' "
 						. "WHERE id IN ("
-						, mysqli_real_escape_string($first_name)
-						, mysqli_real_escape_string($last_name)
+						, $conn->real_escape_string($first_name)
+						, $conn->real_escape_string($last_name)
 						, $iid
-						, mysqli_real_escape_string($facebook_url)
-						, mysqli_real_escape_string($twitter_url)
-						, mysqli_real_escape_string($linkedin_url)
-						, mysqli_real_escape_string($upload_filename));
+						, $conn->real_escape_string($facebook_url)
+						, $conn->real_escape_string($twitter_url)
+						, $conn->real_escape_string($linkedin_url)
+						, $conn->real_escape_string($upload_filename));
 				while ($row = mysqli_fetch_assoc($results)) {
 					$sql = $sql . $row['id'] . ",";
 				}
@@ -180,20 +181,20 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 			} else {
 				$sql = sprintf("INSERT INTO resource (first_name,last_name,email,user_id,image_url,facebook_id,twitter_id,linkedin_id) "
 						. "VALUES ('%s', '%s', '%s', %d, '%s', '%s', '%s', '%s');"
-						, mysqli_real_escape_string($first_name)
-						, mysqli_real_escape_string($last_name)
-						, mysqli_real_escape_string($email)
+						, $conn->real_escape_string($first_name)
+						, $conn->real_escape_string($last_name)
+						, $conn->real_escape_string($email)
 						, $iid
-						, mysqli_real_escape_string($facebook_url)
-						, mysqli_real_escape_string($twitter_url)
-						, mysqli_real_escape_string($linkedin_url)
-						, mysqli_real_escape_string($upload_filename));
+						, $conn->real_escape_string($facebook_url)
+						, $conn->real_escape_string($twitter_url)
+						, $conn->real_escape_string($linkedin_url)
+						, $conn->real_escape_string($upload_filename));
 			}
 			$results->free();
 									
-			if(!$results = $connection->my_conn->query($sql)){
+			if(!$results = $conn->query($sql)){
 				handle_error('There was an error inserting your profile.'
-					, 'Error Message: ' . $connection->my_conn->error);
+					, 'Error Message: ' . $conn->error);
 			}
 			$results->free();
 

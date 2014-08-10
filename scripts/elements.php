@@ -3,7 +3,7 @@
 require_once 'app_config.php';
 require_once 'authorize.php';
 
-session_start();
+if (!isset($_SESSION)) { session_start(); }
 
 
 function chk_array($unknown) {
@@ -30,12 +30,12 @@ function merge_de_array ( array $elems ) {
 }
 
 class html_attr {
-	public $name;
+	public $aname;
 	public $vals;
 	public $text;
 	
 	public function __construct($attr, $val){
-		$this->name = $attr;
+		$this->aname = $attr;
 		$this->add_val($val);
 		$this->set_text();
 	}
@@ -56,7 +56,7 @@ class html_attr {
 		return true;
 	}
 	private function set_text() {
-		$rtn = $this->name . '="';
+		$rtn = $this->aname . '="';
 		foreach($this->vals as $val) { $rtn = $rtn . $val . ' '; }
 		$rtn = rtrim($rtn) . '"';
 		$this->text = $rtn;
@@ -88,18 +88,18 @@ class dom_element {
 	}
 	private function attr_names() {
 		if(!isset($this->attrs)) { return false; }
-		else { foreach($this->attrs as $a) { $r[] = $a->name; }
+		else { foreach($this->attrs as $a) { $r[] = $a->aname; }
 			return $r; }
 	}
 	protected function get_attr_by_name($s) {
-		if(isset($this->attrs)) { foreach($this->attrs as $a) { if($s->name == $a->name){ return $a; } }}
+		if(isset($this->attrs)) { foreach($this->attrs as $a) { if($s->aname == $a->aname){ return $a; } }}
 		return false;
 	}
 	private function chk_in_attrs($a) {
 		if(!isset($this->attrs)) { return false; }
-		elseif(!in_array($a->name, $this->attr_names())) { return false; }
+		elseif(!in_array($a->aname, $this->attr_names())) { return false; }
 		else {
-			if(!$ca = $this->get_attr_by_name($a->name)) { return false; }
+			if(!$ca = $this->get_attr_by_name($a->aname)) { return false; }
 			else { foreach($a->vals as $v) { if(in_array($v, $ca->vals)) { return true; }}}}
 		return false;
 	}
@@ -140,11 +140,9 @@ class hidden_span extends dom_element {
 }
 class sb_nav_li extends dom_element{
 	public function __construct($anchor, $hidden_spans = NULL, $active = 0) {
+		$hs = '';
 		if(isset($hidden_spans)) {
-			$hs = '';
-			if(chk_array($hidden_spans)) {
-				foreach($hidden_spans as $s) { $hs = $hs . $s->html_out; }
-			} else { $hs = $hidden_spans->html_out; }
+			$hs = (chk_array($hidden_spans)) ? merge_de_array($hidden_spans) : $hidden_spans->html_out;
 		}
 		$t = $anchor->html_out . $hs;
 		parent::__construct('li',$t);
@@ -162,7 +160,7 @@ class sb_nav_ul extends dom_element {
 		$a[] = new html_attr('id',$id);
 		$a[] = new html_attr('class','biglist');
 		parent::__construct('ul', $t, $a);
-		$this->set_html;		
+		$this->set_html();		
 	}
 }
 class sb_nav_list_div extends dom_element {
@@ -170,7 +168,7 @@ class sb_nav_list_div extends dom_element {
 		$h = new dom_element('h3',$title);
 		$t = $h->html_out . $list->html_out;
 		parent::__construct('div', $t, new html_attr('class','bd'));
-		$this->set_html;
+		$this->set_html();
 	}
 }
 class sb_nav extends dom_element {
@@ -181,14 +179,14 @@ class sb_nav extends dom_element {
 		$t = $hd->html_out . $tb;	
 
 		parent::__construct('div', $t, new html_attr('class','block'));
-		$this->set_html;
+		$this->set_html();
 	}
 }
 class sb_info_block_p extends dom_element {
 	public function __construct($text, $id = NULL) {
 		parent::__construct('p', $text);
 		if (isset($id)) { $this->add_attr(new html_attr('id',$id)); }
-		$this->set_html;
+		$this->set_html();
 	}
 }
 class sb_info_block_body extends dom_element {
@@ -207,9 +205,9 @@ class sb_info_block extends dom_element {
 		if(!isset($body)) { $body = new sb_info_block_body(); }
 		$blka[] = new html_attr('id',$id);
 		$blka[] = new html_attr('class','block');
-		if ($this->visibility == 0) { $blka[] = new html_attr('class','bh'); }
+		if ($visible == 0) { $blka[] = new html_attr('class','bh'); }
 		parent::__construct('div',$hdd->html_out . $body->html_out, $blka);		
-		$this->set_html;
+		$this->set_html();
 	}
 }
 class sidebar extends dom_element {
@@ -220,7 +218,7 @@ class sidebar extends dom_element {
 		if(isset($nav)) { $t = $t . $nav->html_out; }
 		if(isset($l_block)) { $t = $t . $l_block->html_out; }
 		parent::__construct('div', $t, $a);
-		$this->set_html;
+		$this->set_html();
 	}
 }
 ?>

@@ -3,7 +3,7 @@
 require_once 'database_connection.php';
 require_once 'app_config.php';
 
-session_start();
+if (!isset($_SESSION)) { session_start(); }
 
 function authorize_user($groups = NULL) {
 	// No need to check groups if there aren't any sessions set
@@ -17,20 +17,21 @@ function authorize_user($groups = NULL) {
 		return;
 	}
 
+	$conn = con_POPM_dB::getInstance();
 	// Set up the query string
 	$query_string = "SELECT ug.user_id " .
-					"FROM user_groups ug, groups g " .
+					"FROM user_group ug, `group` g " .
 					"WHERE g.name = '%s' " .
 					"AND g.id = ug.group_id " .
 					"AND ug.user_id = " .
-					mysql_real_escape_string($_SESSION['user_id']);
+					$conn->real_escape_string($_SESSION['user_id']);
 
 	foreach ($groups as $group) {
 		// do a SQL search for the current $group
-		$query = sprintf($query_string, mysql_real_escape_string($group));
-		$result = mysql_query($query);
+		$query = sprintf($query_string, $conn->real_escape_string($group));
+		$results = $conn->query($query);
 
-		if (mysql_num_rows($result) == 1) {
+		if ($results->num_rows == 1) {
 			// user is allowed access
 			return;
 		}
@@ -40,16 +41,17 @@ function authorize_user($groups = NULL) {
 }
 
 function user_in_group($user_id, $group) {
+	$conn = con_POPM_dB::getInstance();
 	$query_string = "SELECT ug.user_id " .
-					"FROM user_groups ug, groups g " .
+					"FROM user_group ug, `group` g " .
 					"WHERE g.name = '%s' " .
 					"AND g.id = ug.group_id " .
-					"AND ug.user_id = %d";
-	$query = sprintf($query_string, mysql_real_escape_string($group),
-					mysql_real_escape_string($user_id));
-	$result = mysql_query($query);
+					"AND ug.user_id = %d ";
+	$query = sprintf($query_string, $conn->real_escape_string($group),
+					$conn->real_escape_string($user_id));
+	$result = $conn->query($query);
 
-	if (mysql_num_rows($result) == 1) {
+	if ($result->num_rows == 1) {
 		return true;
 	} else {
 		return false;

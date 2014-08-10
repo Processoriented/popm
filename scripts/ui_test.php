@@ -6,7 +6,6 @@
 
 	$conn = proj_data::getInstance();
 		
-	
 			
 	if(!$results = $conn->query("SELECT t.id, t.name, t.plural FROM resource_type t ORDER BY t.id;")){
 		handle_error('There was an error running the query.', $connection->my_conn->error);
@@ -43,16 +42,20 @@
 	$u = new sb_nav_ul($l,'uList');
 	$d[] = new sb_nav_list_div($u, 'Types');
 	$oid = array(1,2,3,4,5,6,7,8);
-	foreach ($oid as $ov) { $o[] = new sb_nav_a('record : ' . $ov,'a'.$oidi); }
+	foreach ($oid as $ov) { $o[] = new sb_nav_a('record : ' . $ov,'a'.$ov); }
 	foreach($o as $oi) { $lst[] = new sb_nav_li($oi); }
 	$ua = new sb_nav_ul($lst,'uList2');
 	$d[] = new sb_nav_list_div($ua, 'Records');
 	
-	$projects = $conn->getNavData(311000000);
-	foreach($projects as $proj) { $pa[] = new sb_nav_a($proj['title'], 'proj_' . $proj['id']); }
-	foreach($pa as $pi) { $plst[] = new sb_nav_li($pi); }
-	$upr = new sb_nav_ul($plst,'uLstPr');
-	$d[] = new sb_nav_list_div($upr, 'Project records');
+	try {
+		$projects = $conn->getNavData(11000000);
+		foreach($projects as $proj) { $pa[] = new sb_nav_a($proj['title'], 'proj_' . $proj['id']); }
+		foreach($pa as $pi) { $plst[] = new sb_nav_li($pi); }
+		$upr = new sb_nav_ul($plst,'uLstPr');
+		$d[] = new sb_nav_list_div($upr, 'Project records');
+	} catch(Exception $e) {
+		// nothing here
+	}
 	
 	$n = new sb_nav($d,'Projects');
 

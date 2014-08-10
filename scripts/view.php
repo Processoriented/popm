@@ -8,7 +8,7 @@ require_once 'elements.php';
 	define("ERROR_MESSAGE", "error");
 	define("WARNING_MESSAGE", "warning");
 // 
-session_start();
+if (!isset($_SESSION)) { session_start(); }
 
 function display_pagetop($title, $javascript = NULL, $success_message = NULL, $error_message = NULL, $warn_message = NULL) {
     display_head($title, $javascript);
@@ -63,28 +63,28 @@ function display_title($title, $success_msg = NULL, $error_msg = NULL, $warn_msg
 EOD;
 	if (!isset($_SESSION['user_id'])) {
 		if ($title == 'User Signup') { echo '<li class="active">'; } else { echo '<li>'; }
-		echo '<a href="/signup.php">Signup</a></li>';
+		echo '<a href="signup.php">Signup</a></li>';
 		if ($title == 'Sign In') { echo '<li class="active">'; } else { echo '<li>'; }
-		echo '<a href="/signin.php">Login</a></li>';
+		echo '<a href="signin.php">Sign In</a></li>';
 	} else {
 		if ($title == 'Project') { echo '<li class="active">'; } else { echo '<li>'; }
-		echo '<a href="/project.php">Projects</a></li>';		
+		echo '<a href="project.php">Projects</a></li>';		
 		if ($title == 'Resource') { echo '<li class="active">'; } else { echo '<li>'; }
-		echo '<a href="/resource.php">Resources</a></li>';		
+		echo '<a href="resource.php">Resources</a></li>';		
 		if ($title == 'Calendar') { echo '<li class="active">'; } else { echo '<li>'; }
-		echo '<a href="/calendar.php">Calendar</a></li>';
+		echo '<a href="calendar.php">Calendar</a></li>';
 		echo '</ul>';
 		echo '<ul id="user-navigation">';
 		if (user_in_group($_SESSION['user_id'], "admin")) {		
 			if ($title == 'Management') { echo '<li class="active">'; } else { echo '<li>'; }
-			echo '<a href="/management.php">Management</a></li>';
+			echo '<a href="management.php">Management</a></li>';
 		}
 		if ($title == 'Profile') { echo '<li class="active">'; } else { echo '<li>'; }
-		echo '<a href="/profile.php">Profile</a></li>';
+		echo '<a href="profile.php">Profile</a></li>';
 		if ($title == 'Settings') { echo '<li class="active">'; } else { echo '<li>'; }
-		echo '<a href="/settings.php">Settings</a></li>';
-		if ($title == 'Logout') { echo '<li class="active">'; } else { echo '<li>'; }
-		echo '<a href="/logout.php">Logout</a></li>';
+		echo '<a href="settings.php">Settings</a></li>';
+		if ($title == 'Sign Out') { echo '<li class="active">'; } else { echo '<li>'; }
+		echo '<a href="signout.php">Logout</a></li>';
 	}
 	echo <<<EOD
 	        </ul>
@@ -119,7 +119,7 @@ function display_message($msg, $msg_type) {
 }
 
 function display_sidebar($title) {
-    echo create_sidebar($title);
+    //echo create_sidebar($title);
 }
 
 function display_footer() {

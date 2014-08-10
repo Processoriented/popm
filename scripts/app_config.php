@@ -4,15 +4,17 @@
 define("DEBUG_MODE", true);
 
 //Site root
-define("SITE_ROOT", "/");
+define("SITE_ROOT", "/popm/");
 
 // Location of web files on host
-define("HOST_WWW_ROOT", "/home/processo/public_html/");
+define("HOST_WWW_ROOT", "/Applications/MAMP/htdocs/");
 
 // Database connection constants
 define("DATABASE_HOST", "localhost");
-define("DATABASE_USERNAME", "processo_vincent");
-define("DATABASE_PASSWORD", "QGRDCS6JXD28");
+define("DATABASE_USERNAME", "root");
+define("DATABASE_PASSWORD", "root");
+// define("DATABASE_USERNAME", "processo_vincent");
+// define("DATABASE_PASSWORD", "QGRDCS6JXD28");
 define("DATABASE_NAME", "processo_Dev");
 
 function debug_print($message) {

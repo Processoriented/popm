@@ -3,9 +3,11 @@
 require_once 'scripts/database_connection.php';
 require_once 'scripts/view.php';
 
-$error_message = $_REQUEST['error_message'];
+$error_message = isset($_REQUEST['error_message']) ? $_REQUEST['error_message'] : NULL;
+$success_message = isset($_REQUEST['success_message']) ? $_REQUEST['success_message'] : NULL;
+$warning_message = isset($_REQUEST['warning_message']) ? $_REQUEST['warning_message'] : NULL;
 
-session_start();
+if (!isset($_SESSION)) { session_start(); }
 
 //if the user is logged in, the user_id session will be set
 if(!isset($_SESSION['user_id'])) {
@@ -17,8 +19,8 @@ if(!isset($_SESSION['user_id'])) {
 	// See if a login form was submitted with a username for login
 	if(isset($_POST['username'])) {
 		// Try and log the user in
-		$username = mysqli_real_escape_string(trim($_REQUEST['username']));
-		$password = mysqli_real_escape_string(trim($_REQUEST['password']));
+		$username = $connection->my_conn->real_escape_string(trim($_REQUEST['username']));
+		$password = $connection->my_conn->real_escape_string(trim($_REQUEST['password']));
 
 		//look up the user
 		$query = sprintf("SELECT user_id, username FROM user "
@@ -34,8 +36,8 @@ if(!isset($_SESSION['user_id'])) {
 		if ($results->num_rows == 1) {
 			while ($result = $results->fetch_assoc()) {
 				$user_id = $result['user_id'];
-				setcookie('user_id', $user_id);
-				setcookie('username', $result['username']);
+				$_SESSION['user_id'] = $user_id;
+				$_SESSION['username'] = $username;
 				header("Location: profile.php");
 				exit();
 			}
@@ -50,10 +52,8 @@ if(!isset($_SESSION['user_id'])) {
 	// since they're just logging in
 	//
 	$svr_php_self = $_SERVER['PHP_SELF'];
-	if (isset($username)) {
-		$sply_username = sprintf(" value='%s'",$username);
-	}
-	display_pagetop("Sign In", NULL, $_REQUEST['success_message'], $_REQUEST['error_message'], $_REQUEST['warning_message']);
+	$sply_username = isset($username) ? sprintf(" value='%s'",$username) : '';
+	display_pagetop("Sign In", NULL, $success_message, $error_message, $warning_message);
 } else {
 	// Now handle the case where they're logged in
 	header("Location: profile.php");
