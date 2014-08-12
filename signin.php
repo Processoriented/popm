@@ -60,33 +60,24 @@ if(!isset($_SESSION['user_id'])) {
 	exit();
 }
 ?>
-
-<div id="yui-main">
-	<div class="yui-b">
-		<div class="yui-g">
-			<!-- Signin Form -->
-			<div class="block">
-				<div class="hd">
-					<h2>Login to Process Oriented Project Management</h2>
-				</div>
-				<div class="bd">
-					<h3>Sign In</h3>
-					<form id="signin_form" action="signin.php" method="POST">
-						<p>
-							<label for="username">Username:</label>
-							<input type="text" name="username" id="username" size="20" <?php echo $sply_username; ?> />
-						</p>
-						<p>
-							<label for="password">Password:</label>
-							<input type="password" name="password" id="password" size="20" />
-						</p>
-						<p><input type="submit" value="Sign In" /></p>
-					</form>
-				</div>
-			</div>
-		</div>
+<!-- Signin Form -->
+<div class="block">
+	<div class="hd">
+		<h2>Login to Process Oriented Project Management</h2>
+	</div>
+	<div class="bd">
+		<h3>Sign In</h3>
+		<form id="signin_form" action="signin.php" method="POST">
+			<p>
+				<label for="username">Username:</label>
+				<input type="text" name="username" id="username" size="20" <?php echo $sply_username; ?> />
+			</p>
+			<p>
+				<label for="password">Password:</label>
+				<input type="password" name="password" id="password" size="20" />
+			</p>
+			<p><input type="submit" value="Sign In" /></p>
+		</form>
 	</div>
 </div>
-<?php
-	display_rest_of_page();
-?>
+<?php display_rest_of_page(); ?>

@@ -242,77 +242,73 @@ $account_scripts = <<<EOD
 EOD;
 
 
-display_pagetop("User Signup", $account_scripts, $_REQUEST['success_message'], $_REQUEST['error_message'], $_REQUEST['warning_message']);
+$success_msg = (isset($_REQUEST['success_message'])) ? $_REQUEST['success_message'] : NULL;
+$error_msg = (isset($_REQUEST['error_message'])) ? $_REQUEST['error_message'] : NULL;
+$warn_msg = (isset($_REQUEST['warning_message'])) ? $_REQUEST['warning_message'] : NULL;
+
+display_pagetop("User Signup", $account_scripts, $success_msg, $error_msg, $warn_msg);
 ?>
-<div id="yui-main">
-	<div class="yui-b">
-		<div class="yui-g">
-			<!-- Signup Form -->
-			<div class="block">
-				<div class="hd">
-					<h2>User Information</h2>
-				</div>
-				<div class="bd">
-					<h3>Sign Up for Process Oriented Project Management</h3>
-					<form id="signup_form" action="signup.php" method="POST" enctype="multipart/form-data">
-						<p>
-							<label for="first_name">First Name:</label>
-							<input type="text" name="first_name" size="20" class="required" />
-						</p>
-						<p>
-							<label for="last_name">Last Name:</label>
-							<input type="text" name="last_name" size="20" class="required" />
-						</p>
-						<p>
-							<label for="username">Username:</label>
-							<input type="text" name="username" size="20" class="required" />
-						</p>
-						<p>
-							<label for="password">Password:</label>
-							<input type="password" id="password" name="password" size="20" class="required password" />
-							<div class="password-meter">
-								<div class="password-meter-message"></div>
-								<div class="password-meter-bg">
-									<div class="password-meter-bar"></div>
-								</div>
-							</div>							
-						</p>
-						<p>
-							<label for="confirm_password">Confirm Password:</label>
-							<input type="password" id="confirm_password" name="confirm_password" size="20" class="required" />
-						</p>
-						<p>
-							<label for="email">E-Mail Address:</label>
-							<input type="text" name="email" size="50" />
-						</p>
-						<p>
-							<label for="linkedin_url">LinkedIn URL:</label>
-							<input type="text" name="linkedin_url" size="50" />
-						</p>
-						<p>
-							<label for="facebook_url">Facebook URL:</label>
-							<input type="text" name="facebook_url" size="50" />
-						</p>
-						<p>
-							<label for="twitter_handle">Twitter Handle:</label>
-							<input type="text" name="twitter_handle" size="20" />
-						</p>
-						<p>
-							<input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
-							<label for="user_pic">Upload a picture:</label>
-							<input type="file" name="user_pic" size="30" />
-						</p>
-						<p>
-							<label for="bio">Biography:</label>
-							<textarea name="bio" cols="40" rows="10"></textarea>
-						</p>
-						<p><input type="submit" value="Submit" /> or <input type="reset" value="Clear and Restart" /></p>
-					</form>
-				</div>
-			</div>
-		</div>
+<!-- Signup Form -->
+<div class="block">
+	<div class="hd">
+		<h2>User Information</h2>
+	</div>
+	<div class="bd">
+		<h3>Sign Up for Process Oriented Project Management</h3>
+		<form id="signup_form" action="signup.php" method="POST" enctype="multipart/form-data">
+			<p>
+				<label for="first_name">First Name:</label>
+				<input type="text" name="first_name" size="20" class="required" />
+			</p>
+			<p>
+				<label for="last_name">Last Name:</label>
+				<input type="text" name="last_name" size="20" class="required" />
+			</p>
+			<p>
+				<label for="username">Username:</label>
+				<input type="text" name="username" size="20" class="required" />
+			</p>
+			<p>
+				<label for="password">Password:</label>
+				<input type="password" id="password" name="password" size="20" class="required password" />
+				<div class="password-meter">
+					<div class="password-meter-message"></div>
+					<div class="password-meter-bg">
+						<div class="password-meter-bar"></div>
+					</div>
+				</div>							
+			</p>
+			<p>
+				<label for="confirm_password">Confirm Password:</label>
+				<input type="password" id="confirm_password" name="confirm_password" size="20" class="required" />
+			</p>
+			<p>
+				<label for="email">E-Mail Address:</label>
+				<input type="text" name="email" size="50" />
+			</p>
+			<p>
+				<label for="linkedin_url">LinkedIn URL:</label>
+				<input type="text" name="linkedin_url" size="50" />
+			</p>
+			<p>
+				<label for="facebook_url">Facebook URL:</label>
+				<input type="text" name="facebook_url" size="50" />
+			</p>
+			<p>
+				<label for="twitter_handle">Twitter Handle:</label>
+				<input type="text" name="twitter_handle" size="20" />
+			</p>
+			<p>
+				<input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
+				<label for="user_pic">Upload a picture:</label>
+				<input type="file" name="user_pic" size="30" />
+			</p>
+			<p>
+				<label for="bio">Biography:</label>
+				<textarea name="bio" cols="40" rows="10"></textarea>
+			</p>
+			<p><input type="submit" value="Submit" /> or <input type="reset" value="Clear and Restart" /></p>
+		</form>
 	</div>
 </div>
-<?php
-	display_rest_of_page();
-?>
+<?php display_rest_of_page(); ?>

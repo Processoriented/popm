@@ -3,11 +3,11 @@
 require_once 'app_config.php';
 require_once 'authorize.php';
 require_once 'elements.php';
-// 
-	define("SUCCESS_MESSAGE", "notice");
-	define("ERROR_MESSAGE", "error");
-	define("WARNING_MESSAGE", "warning");
-// 
+
+define("SUCCESS_MESSAGE", "notice");
+define("ERROR_MESSAGE", "error");
+define("WARNING_MESSAGE", "warning");
+
 if (!isset($_SESSION)) { session_start(); }
 
 function display_pagetop($title, $javascript = NULL, $success_message = NULL, $error_message = NULL, $warn_message = NULL) {
@@ -16,6 +16,9 @@ function display_pagetop($title, $javascript = NULL, $success_message = NULL, $e
 }
 
 function display_rest_of_page($title = "") {
+	echo '</div>';
+	echo '</div>';
+	echo '</div>';
 	display_sidebar($title);
 	display_footer();
 }
@@ -62,10 +65,10 @@ function display_title($title, $success_msg = NULL, $error_msg = NULL, $warn_msg
                 <ul id="primary-navigation">
 EOD;
 	if (!isset($_SESSION['user_id'])) {
-		if ($title == 'User Signup') { echo '<li class="active">'; } else { echo '<li>'; }
-		echo '<a href="signup.php">Signup</a></li>';
 		if ($title == 'Sign In') { echo '<li class="active">'; } else { echo '<li>'; }
 		echo '<a href="signin.php">Sign In</a></li>';
+		if ($title == 'User Signup') { echo '<li class="active">'; } else { echo '<li>'; }
+		echo '<a href="signup.php">Signup</a></li>';
 	} else {
 		if ($title == 'Project') { echo '<li class="active">'; } else { echo '<li>'; }
 		echo '<a href="project.php">Projects</a></li>';		
@@ -86,16 +89,15 @@ EOD;
 		if ($title == 'Sign Out') { echo '<li class="active">'; } else { echo '<li>'; }
 		echo '<a href="signout.php">Logout</a></li>';
 	}
-	echo <<<EOD
-	        </ul>
-                <div class="clear"></div>
-            </div>
-        </div>
-        <div id="bd">
-EOD;
-
-
+	echo '</ul>';
+	echo '<div class="clear"></div>';
+	echo '</div>';
+	echo '</div>';
+	echo '<div id="bd">';
 	display_messages($success_msg, $error_msg, $warn_msg);
+	echo '<div id="yui-main">';
+	echo '<div class="yui-b">';
+	echo '<div class="yui-g">';
 }
 
 function display_messages($success_msg = NULL, $error_msg = NULL, $warn_msg = NULL) {
@@ -119,13 +121,15 @@ function display_message($msg, $msg_type) {
 	echo $msg_d->html_out;
 }
 
-function display_sidebar($title) {
+function about_popm() {
 	$p[] = new block_p('This project is based on the idea that many of the processes involved in managing a project can be automated.');
 	$p[] = new block_p('Figuring out whether a meeting is needed, who needs to attend the meeting, and what they need to contribute is a repetitive task that lends itself well to automation.  Likewise, meeting minutes, reminders, and other communications to all kinds of stakeholders should not be a manual task because it involves the same steps every time.');
 	$p[] = new block_p('The result is a clean, intuitive project management platform including all the features you would expect and a high degree of automation. We hope you find it useful.');
 	$ab = new block_body($p);
-	$abl = new block('pgm_desc', $ab, 'About POPM');
-	
+	return new block('pgm_desc', $ab, 'About POPM');
+}
+function display_sidebar($title) {
+	$abl = about_popm();
     $sdbr = new sidebar($abl);
     echo $sdbr->html_out;
 }
@@ -136,6 +140,9 @@ function display_footer() {
     $ftr_p = new dom_element('p', 'Copyright &copy; 2014 ' . $sa->html_out, new html_attr('class', 'inner'));
     $ftr_d = new dom_element('div', $ftr_p->html_out, new html_attr('id','ft'));
 	echo $ftr_d->html_out;
+	echo '</div>';
+	echo '</body>';
+	echo '</html>';
 }
 
 ?>

@@ -4,7 +4,8 @@
 	display_pagetop("POPM",NULL,NULL,NULL,NULL,NULL);
 ?>
             <div id="yui-main">
-                <div class="yui-b"><div class="yui-g">
+                <div class="yui-b">
+                	<div class="yui-g">
 
                     <!-- Basic block with spaced tabs -->
                     <div class="block tabs spaces">
