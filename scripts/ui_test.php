@@ -29,27 +29,27 @@
 	<body>
 		
 <?php
-	$ibp[] = new sb_info_block_p('This is a test paragraph','fst');
-	$ibp[] = new sb_info_block_p('This is a different test paragraph','scd');
-	$bb = new sb_info_block_body($ibp);
-	$ib = new sb_info_block('vib', $bb,'test block');
+	$ibp[] = new block_p('This is a test paragraph','fst');
+	$ibp[] = new block_p('This is a different test paragraph','scd');
+	$bb = new block_body($ibp);
+	$ib = new block('vib', $bb,'test block');
 	
 	foreach($types as $typ) {
-		$a = new sb_nav_a($typ['plural'],'a'. $typ['id']);
+		$a = new nav_a($typ['plural'],'a'. $typ['id']);
 		$h = new hidden_span($typ['name'],'a'. $typ['id']);
 		$l[] = new sb_nav_li($a,$h);
 	}
 	$u = new sb_nav_ul($l,'uList');
 	$d[] = new sb_nav_list_div($u, 'Types');
 	$oid = array(1,2,3,4,5,6,7,8);
-	foreach ($oid as $ov) { $o[] = new sb_nav_a('record : ' . $ov,'a'.$ov); }
+	foreach ($oid as $ov) { $o[] = new nav_a('record : ' . $ov,'a'.$ov); }
 	foreach($o as $oi) { $lst[] = new sb_nav_li($oi); }
 	$ua = new sb_nav_ul($lst,'uList2');
 	$d[] = new sb_nav_list_div($ua, 'Records');
 	
 	try {
 		$projects = $conn->getNavData(11000000);
-		foreach($projects as $proj) { $pa[] = new sb_nav_a($proj['title'], 'proj_' . $proj['id']); }
+		foreach($projects as $proj) { $pa[] = new nav_a($proj['title'], 'proj_' . $proj['id']); }
 		foreach($pa as $pi) { $plst[] = new sb_nav_li($pi); }
 		$upr = new sb_nav_ul($plst,'uLstPr');
 		$d[] = new sb_nav_list_div($upr, 'Project records');

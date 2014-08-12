@@ -99,7 +99,6 @@ EOD;
 }
 
 function display_messages($success_msg = NULL, $error_msg = NULL, $warn_msg = NULL) {
-    echo "<div class='block bh'>\n";
     if (!is_null($success_msg) && (strlen($success_msg) > 0)) {
         display_message($success_msg, SUCCESS_MESSAGE);
     }
@@ -109,29 +108,34 @@ function display_messages($success_msg = NULL, $error_msg = NULL, $warn_msg = NU
     if (!is_null($warn_msg) && (strlen($warn_msg) > 0)) {
         display_message($warn_msg, WARNING_MESSAGE);
     }
-    echo "\t</div>\n\n";
 }
 
 function display_message($msg, $msg_type) {
-    echo "\t<div class='bd'>\n";
-    echo "\t\t<p class='alert {$msg_type}'>{$msg}</p>\n";
-    echo "\t</div>\n";
+	$pcls[] = new html_attr('class', 'alert');
+	$pcls[] = new html_attr('class', $msg_type);	
+	$msg_p = new dom_element('p', $msg, $pcls);
+	$msg_b = new dom_element('div', $msg_p->html_out, new html_attr('class', 'bd'));
+	$msg_d = new dom_element('div', $msg_b->html_out, new html_attr('class', 'block'));
+	echo $msg_d->html_out;
 }
 
 function display_sidebar($title) {
-    //echo create_sidebar($title);
+	$p[] = new block_p('This project is based on the idea that many of the processes involved in managing a project can be automated.');
+	$p[] = new block_p('Figuring out whether a meeting is needed, who needs to attend the meeting, and what they need to contribute is a repetitive task that lends itself well to automation.  Likewise, meeting minutes, reminders, and other communications to all kinds of stakeholders should not be a manual task because it involves the same steps every time.');
+	$p[] = new block_p('The result is a clean, intuitive project management platform including all the features you would expect and a high degree of automation. We hope you find it useful.');
+	$ab = new block_body($p);
+	$abl = new block('pgm_desc', $ab, 'About POPM');
+	
+    $sdbr = new sidebar($abl);
+    echo $sdbr->html_out;
 }
 
 function display_footer() {
-    echo <<<EOD
-        <div id="ft">
-            <p class="inner">Copyright &copy; 2014 Processoriented.Guru</p>
-        </div>
-
-    </div>
-</body>
-</html>
-EOD;
+    echo "\t</div>\n";
+    $sa = new dom_element('a','Processoriented.Guru', new html_attr('href','http://Processoriented.Guru'));
+    $ftr_p = new dom_element('p', 'Copyright &copy; 2014 ' . $sa->html_out, new html_attr('class', 'inner'));
+    $ftr_d = new dom_element('div', $ftr_p->html_out, new html_attr('id','ft'));
+	echo $ftr_d->html_out;
 }
 
 ?>

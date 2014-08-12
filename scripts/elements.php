@@ -57,7 +57,7 @@ class html_attr {
 	}
 	private function set_text() {
 		$rtn = $this->aname . '="';
-		foreach($this->vals as $val) { $rtn = $rtn . $val . ' '; }
+		$rtn = $rtn . implode(' ', $this->vals);
 		$rtn = rtrim($rtn) . '"';
 		$this->text = $rtn;
 	}
@@ -92,15 +92,32 @@ class dom_element {
 			return $r; }
 	}
 	protected function get_attr_by_name($s) {
-		if(isset($this->attrs)) { foreach($this->attrs as $a) { if($s->aname == $a->aname){ return $a; } }}
+		if(isset($this->attrs)) { foreach($this->attrs as $a) { if($s == $a->aname){ return $a; } } }
 		return false;
+	}
+	public function get_id() {
+		if(!$ida = get_attr_by_name('id')) { return false; }
+		else { return implode($ida->vals); } 
+	}
+	public function get_class_vals() {
+		if(!$cls = get_attr_by_name('class')) { return false; }
+		else { return $cls->vals; } 
+	}
+	public function remove_class($cls_name) {
+		if($cla = get_attr_by_name('class')) {
+			if(!($k = array_search($cls_name, $cla->vals)) === false) {
+				unset($cla->vals[$k]);
+			}
+		}
 	}
 	private function chk_in_attrs($a) {
 		if(!isset($this->attrs)) { return false; }
 		elseif(!in_array($a->aname, $this->attr_names())) { return false; }
 		else {
-			if(!$ca = $this->get_attr_by_name($a->aname)) { return false; }
-			else { foreach($a->vals as $v) { if(in_array($v, $ca->vals)) { return true; }}}}
+			if(!$cas = $this->get_attr_by_name($a->aname)) { return false; }
+			else { foreach($a->vals as $v) { 
+				foreach($cas as $ca) {
+					if(in_array($v, $ca->vals)) { return true; }}}}}
 		return false;
 	}
 	private function attr_text() {
@@ -120,7 +137,7 @@ class dom_element {
 		$this->html_out = $rtn;
 	}
 }
-class sb_nav_a extends dom_element {
+class nav_a extends dom_element {
 	public function __construct($caption, $title = NULL, $href = '#') {
 		parent::__construct('a',$caption);
 		$a[] = new html_attr('href',$href);	
@@ -150,6 +167,20 @@ class sb_nav_li extends dom_element{
 		$this->set_html();
 	}
 }
+class tab_nav_li extends dom_element{
+	public function __construct($anchor, $active = 0) {
+		parent::__construct('li', $anchor->html_out);
+		if($active == 1) { $this->add_attr(new html_attr('class','active')); }
+		$this->set_html();
+	}
+	public function toggle_active() {
+		if(!in_array('active',$this->get_class_vals())) { 
+			$this->add_attr(new html_attr('class','active')); 
+		} else { 
+			$this->remove_class('active'); 
+		}
+	}	
+}
 class sb_nav_ul extends dom_element {
 	public function __construct($items,$id) {
 	// <ul id="action-switcher" class="biglist">
@@ -159,6 +190,17 @@ class sb_nav_ul extends dom_element {
 		} else { $t = $t . $items->html_out; }
 		$a[] = new html_attr('id',$id);
 		$a[] = new html_attr('class','biglist');
+		parent::__construct('ul', $t, $a);
+		$this->set_html();		
+	}
+}
+class tab_nav_ul extends dom_element {
+	public function __construct($items) {
+		$t = '';
+		if(chk_array($items)) {
+			foreach($items as $i) { $t = $t . $i->html_out; }
+		} else { $t = $t . $items->html_out; }
+		$a[] = new html_attr('id','tab-switcher');
 		parent::__construct('ul', $t, $a);
 		$this->set_html();		
 	}
@@ -182,31 +224,58 @@ class sb_nav extends dom_element {
 		$this->set_html();
 	}
 }
-class sb_info_block_p extends dom_element {
-	public function __construct($text, $id = NULL) {
+class block_p extends dom_element {
+	public function __construct($text, $id = NULL, $small = NULL, $gray = NULL) {
 		parent::__construct('p', $text);
 		if (isset($id)) { $this->add_attr(new html_attr('id',$id)); }
+		if (isset($small)) { $this->add_attr(new html_attr('class','small')); }
+		if (isset($gray)) { $this->add_attr(new html_attr('class','gray')); }
 		$this->set_html();
 	}
 }
-class sb_info_block_body extends dom_element {
-	public function __construct($paras = NULL) {
-		$ps = (!isset($paras)) ? new sb_info_block_p('') : $paras;
+class block_body extends dom_element {
+	public function __construct($paras = NULL, $id = NULL) {
+		$ps = (!isset($paras)) ? new block_p('') : $paras;
 		$pt = (!chk_array($paras)) ? $ps->html_out : merge_de_array($ps);
-
-		parent::__construct('div',$pt, new html_attr('class','bd'));
+		$ba[] = new html_attr('class','bd');
+		if(isset($id)) { $ba[] = new html_attr('id', $id); }
+		parent::__construct('div',$pt, $ba);
 		$this->set_html();
 	}
 }
-class sb_info_block extends dom_element {
+class block extends dom_element {
 	public function __construct($id, $body = NULL, $title = '', $visible = 1) {
 		$h = new dom_element('h2',$title, new html_attr('id', $id . '_title'));
 		$hdd = new dom_element('div',$h->html_out, new html_attr('class','hd'));
-		if(!isset($body)) { $body = new sb_info_block_body(); }
+		if(!isset($body)) { $body = new block_body(); }
 		$blka[] = new html_attr('id',$id);
 		$blka[] = new html_attr('class','block');
 		if ($visible == 0) { $blka[] = new html_attr('class','bh'); }
 		parent::__construct('div',$hdd->html_out . $body->html_out, $blka);		
+		$this->set_html();
+	}
+}
+class tabbed_block extends dom_element {
+	public function __construct($id, $bodies, $title = '', $active_id = NULL) {
+		$body = '';
+		foreach($bodies as $k => $tab) {
+			$tid = ($tab->get_id()) ? $tab->get_id() : 'tab_' . $k;
+			$a = new nav_a(ucfirst($tid),$tid);
+			if(((!isset($active_id)) && ($k === 0)) || (!$active_id == $tid))  {
+				$li[] = new tab_nav_li($a, 1);
+			} else {
+				$li[] = new tab_nav_li($a);
+				$tab->add_attr(new html_attr('class','bh'));
+			} 
+			$body = $body . $tab->html_out;
+		}
+		$nul = new tab_nav_ul($li);
+		$h = new dom_element('h2',$title, new html_attr('id', $id . '_title'));
+		$hdd = new dom_element('div',$h->html_out . $nul->html_out, new html_attr('class','hd'));
+		$blka[] = new html_attr('id',$id);
+		$blka[] = new html_attr('class','block');
+		$blka[] = new html_attr('class','tabs');
+		parent::__construct('div', $hdd->html_out . $body, $blka);
 		$this->set_html();
 	}
 }
