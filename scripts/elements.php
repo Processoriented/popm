@@ -234,9 +234,10 @@ class block_p extends dom_element {
 	}
 }
 class block_body extends dom_element {
-	public function __construct($paras = NULL, $id = NULL) {
+	public function __construct($paras = NULL, $id = NULL, $title = NULL) {
 		$ps = (!isset($paras)) ? new block_p('') : $paras;
 		$pt = (!chk_array($paras)) ? $ps->html_out : merge_de_array($ps);
+		if(isset($title)) { $pt = '<h3>' . $title . '</h3>' . $pt; }
 		$ba[] = new html_attr('class','bd');
 		if(isset($id)) { $ba[] = new html_attr('id', $id); }
 		parent::__construct('div',$pt, $ba);
@@ -288,6 +289,53 @@ class sidebar extends dom_element {
 		if(isset($l_block)) { $t = $t . $l_block->html_out; }
 		parent::__construct('div', $t, $a);
 		$this->set_html();
+	}
+}
+class frm_input extends dom_element {
+	public $label = NULL;
+	public $para;
+	public function __construct($iType, $id = NULL, $lbl = NULL, $name = NULL, $size = NULL, $val = NULL, $cls = NULL, $lid = NULL, $lcls = NULL) {
+		$rid = (isset($id)) ? $id : 'id_' . rand(100,999);
+		$name = (isset($name)) ? $name : $rid;
+		$la[] = new html_attr('for', $rid);
+		if(isset($lid)) { $la[] = new html_attr('id', $lid); }
+		if(isset($lcls)) { $la[] = new html_attr('class', $lcls); }
+		if(isset($lbl)) { 
+			$l = new dom_element('label', $lbl, $la);
+			$this->label = $lbl;		
+		}
+		
+		$a[] = new html_attr('type', $iType);
+		if((isset($id)) || (isset($lbl))) { 
+			$a[] = new html_attr('id', $rid);
+			$a[] = new html_attr('name', $name); 
+		}
+		if(isset($size)) { $a[] = new html_attr('size', $size); }
+		if(isset($val)) { $a[] = new html_attr('value', $val); }
+		parent::__construct('input', NULL, $a);
+		$this->set_html();
+		$this->para = new frm_p($this);
+		//to supply text for a text input access the elem_txt property of the parent
+	}
+}
+class frm_p extends dom_element {
+	public function __construct($input) {
+		$text = $input->html_out;
+		if(isset($input->label)) { $text = $input->label->html_out . $text; }
+		parent::__construct('p', $text);
+	}
+}
+class frm extends dom_element {
+	public $frm_body;
+	public function __construct($inputs, $id, $action, $title = NULL, $method = 'POST') {
+		$t = '';
+		foreach($inputs as $i) { $t = $t . $i->para->html_out; }
+		$a[] = new html_attr('id', $id);
+		$a[] = new html_attr('action', $action);
+		$a[] = new html_attr('method', $method);
+		
+		parent::__construct('form',$t, $a);
+		$this->frm_body = new block_body($this, NULL, $title);
 	}
 }
 ?>

@@ -64,18 +64,18 @@ function display_title($title, $success_msg = NULL, $error_msg = NULL, $warn_msg
             <div id="navigation">
                 <ul id="primary-navigation">
 EOD;
+	if ($title == 'POPM') { echo '<li class="active">'; } else { echo '<li>'; }
+	echo '<a href="index.php" id="home_link" class="has_img" >Home</a></li>';
 	if (!isset($_SESSION['user_id'])) {
-		if ($title == 'Sign In') { echo '<li class="active">'; } else { echo '<li>'; }
-		echo '<a href="signin.php">Sign In</a></li>';
 		if ($title == 'User Signup') { echo '<li class="active">'; } else { echo '<li>'; }
-		echo '<a href="signup.php">Signup</a></li>';
+		echo '<a href="signup.php" id="signup_link" class="has_img" >Signup</a></li>';
 	} else {
 		if ($title == 'Project') { echo '<li class="active">'; } else { echo '<li>'; }
-		echo '<a href="project.php">Projects</a></li>';		
+		echo '<a href="project.php" id="proj_link" class="has_img" >Projects</a></li>';		
 		if ($title == 'Resource') { echo '<li class="active">'; } else { echo '<li>'; }
-		echo '<a href="resource.php">Resources</a></li>';		
+		echo '<a href="resource.php" id="res_link" class="has_img" >Resources</a></li>';		
 		if ($title == 'Calendar') { echo '<li class="active">'; } else { echo '<li>'; }
-		echo '<a href="calendar.php">Calendar</a></li>';
+		echo '<a href="calendar.php" id="cal_link" class="has_img" >Calendar</a></li>';
 		echo '</ul>';
 		echo '<ul id="user-navigation">';
 		if (user_in_group($_SESSION['user_id'], "admin")) {		
@@ -121,6 +121,15 @@ function display_message($msg, $msg_type) {
 	echo $msg_d->html_out;
 }
 
+function sign_in() {
+	$i[] = new frm_input('text','username','Username:',NULL,'20');
+	$i[] = new frm_input('password','password','Password:',NULL,'20');
+	$i[] = new frm_input('submit',NULL,NULL,NULL,NULL,'Sign In');
+	$f = new frm($i,'signin_form','signin.php','Sign In');
+	$fb = new block_body($f, NULL, 'Sign In');
+	return new block('user_sign_in', $fb, 'Login to Process Oriented Project Management');
+}
+
 function about_popm() {
 	$p[] = new block_p('This project is based on the idea that many of the processes involved in managing a project can be automated.');
 	$p[] = new block_p('Figuring out whether a meeting is needed, who needs to attend the meeting, and what they need to contribute is a repetitive task that lends itself well to automation.  Likewise, meeting minutes, reminders, and other communications to all kinds of stakeholders should not be a manual task because it involves the same steps every time.');
@@ -130,7 +139,11 @@ function about_popm() {
 }
 function display_sidebar($title) {
 	$abl = about_popm();
-    $sdbr = new sidebar($abl);
+	if (!isset($_SESSION['user_id'])) {
+		$sib = sign_in();
+		$sdbr = new sidebar($sib, NULL, $abl);
+	} else { $sdbr = new sidebar($abl); }
+    
     echo $sdbr->html_out;
 }
 

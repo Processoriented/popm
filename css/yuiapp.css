@@ -18,7 +18,46 @@ h1 { font-size:230%; color:#fff; }
 #navigation li a:hover { text-decoration:underline; }
 
 #primary-navigation li a { font-size:116%; padding:0.4em 1em; }
+#primary-navigation li a.has_img {
+	padding-left: 30px;
+	padding-top: 0.4em;
+	padding-bottom: 0.4em;
+	padding-right: 1em;
+	background-repeat: no-repeat;
+	background-position: 10px;
+	background-size: 14px 14px;
+}
 #primary-navigation li.active a { background-color:#f0f0ee; color:#000; }
+#home_link { 
+	background: url(../images/home_white.svg);
+}
+li.active #home_link { 
+	background: url(../images/home.svg);
+}
+#signup_link { 
+	background: url(../images/pencil_white.svg);
+}
+li.active #signup_link { 
+	background: url(../images/pencil.svg);
+}
+#proj_link { 
+	background: url(../images/project_white.svg);
+}
+li.active #proj_link { 
+	background: url(../images/project.svg);
+}
+#res_link { 
+	background: url(../images/people_white.svg);
+}
+li.active #res_link { 
+	background: url(../images/people.svg);
+}
+#cal_link { 
+	background: url(../images/calendar_white.svg);
+}
+li.active #cal_link { 
+	background: url(../images/calendar.svg);
+}
 
 #user-navigation { float:right; }
 #user-navigation li a { font-size:93%; padding:0.5em 1em; }
