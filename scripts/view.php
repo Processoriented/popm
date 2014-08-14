@@ -150,8 +150,23 @@ function display_sidebar($title) {
 function display_footer() {
     echo "\t</div>\n";
     $sa = new dom_element('a','Processoriented.Guru', new html_attr('href','http://Processoriented.Guru'));
+    $twaa[] = new html_attr('href','https://twitter.com/popm_guru');
+    $twaa[] = new html_attr('class','twitter-follow-button');
+    $twaa[] = new html_attr('data-show-count','false');
+    $twa = new dom_element('a',' Follow @popm_guru',$twaa);
+    $tws = new dom_element('script',"!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');");
+    $ti = new dom_element('li',$twa->html_out . $tws->html_out);
+    $tmaa[] = new html_attr('href','https://twitter.com/intent/tweet?screen_name=popm_guru');
+    $tmaa[] = new html_attr('class',"twitter-mention-button");
+    $tmaa[] = new html_attr('data-related',"popm_guru");
+    $tma = new dom_element('a','Tweet to @popm_guru', $tmaa);
+    $tms = new dom_element('script',"!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');");
+    $tmi = new dom_element('li',$tma->html_out . $tms->html_out);
+    $socll = new dom_element('ul', $ti->html_out . $tmi->html_out);
+    $socl = new dom_element('div', $socll->html_out, new html_attr('id', 'social'));
+    $cd = new dom_element('div',NULL,new html_attr('class','clear'));
     $ftr_p = new dom_element('p', 'Copyright &copy; 2014 ' . $sa->html_out, new html_attr('class', 'inner'));
-    $ftr_d = new dom_element('div', $ftr_p->html_out, new html_attr('id','ft'));
+    $ftr_d = new dom_element('div', $socl->html_out . $cd->html_out . $ftr_p->html_out, new html_attr('id','ft'));
 	echo $ftr_d->html_out;
 	echo '</div>';
 	echo '</body>';

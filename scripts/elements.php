@@ -302,7 +302,7 @@ class frm_input extends dom_element {
 		if(isset($lcls)) { $la[] = new html_attr('class', $lcls); }
 		if(isset($lbl)) { 
 			$l = new dom_element('label', $lbl, $la);
-			$this->label = $lbl;		
+			$this->label = $l;		
 		}
 		
 		$a[] = new html_attr('type', $iType);

@@ -156,6 +156,37 @@ ul.biglist li a:hover { text-decoration:underline; }
 
 /* Footer */
 #ft { text-align:center; font-size:85%; padding:0.5em 1em; color:#262626; }
+#social { 
+   float:left;
+   width:100%;
+   overflow:hidden;
+   position:relative;
+}
+#social ul {
+   clear:left;
+   float:left;
+   list-style:none;
+   margin:0;
+   padding:0;
+   position:relative;
+   left:50%;
+   text-align:center;
+}
+#social li { 
+   display:block;
+   float:left;
+   list-style:none;
+   margin:0;
+   padding:0 5px;
+   position:relative;
+   right:50%;
+}
+#ft .fl {
+    margin-left: auto;
+    margin-right: auto; 
+    width: 15%;
+    float:left;
+}
 
 /* Generics */
 p { margin-bottom:1em; }
