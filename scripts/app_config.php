@@ -11,10 +11,8 @@ define("HOST_WWW_ROOT", "/Applications/MAMP/htdocs/");
 
 // Database connection constants
 define("DATABASE_HOST", "popm-dev.chpawkmskbul.us-west-2.rds.amazonaws.com");
-define("DATABASE_USERNAME", "processoriented");
-define("DATABASE_PASSWORD", "ssn718HNL");
-// define("DATABASE_USERNAME", "processo_vincent");
-// define("DATABASE_PASSWORD", "QGRDCS6JXD28");
+//define("DATABASE_USERNAME", "<Enter Username Here>");
+//define("DATABASE_PASSWORD", "<Enter Password Here>");
 define("DATABASE_NAME", "processo_Dev");
 
 function debug_print($message) {
