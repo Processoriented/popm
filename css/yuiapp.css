@@ -74,6 +74,9 @@ h3 { font-size:153.9%; margin-bottom:0.5em; }
 .block .bd { padding:1em; background-color:#fff; }
 .block .bd h2 { color:#7a1818; }
 .block .bd h3 { color:#7a1818; }
+.block .column { width:48%; }
+.block .left { float:left; }
+.block .right { float:right; }
 
 /* Extend block with tabs */
 .tabs .hd { padding:0; }
