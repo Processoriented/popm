@@ -86,6 +86,28 @@ class dom_element {
 	private function add_attrs($attrs) {
 		foreach($attrs as $a) { $this->add_attr($a); }
 	}
+	public function apnd($elem) {
+		if(chk_array($elem)) { $this->apnd_array($elem); }
+		else { 
+			$t = (is_a($elem,dom_element)) ? $elem->html_out : $elem;
+			$this->elem_txt = $this->elem_txt . $t;
+			$this->set_html();
+		}
+	}
+	public function ppnd($elem) {
+		if(chk_array($elem)) { $this->ppnd_array($elem); }
+		else { 
+			$t = (is_a($elem,dom_element)) ? $elem->html_out : $elem;
+			$this->elem_txt = $t . $this->elem_txt;
+			$this->set_html();
+		}	
+	}
+	private function apnd_array($elems) {
+		foreach($elems as $elem) { $this->apnd($elem); }
+	}
+	private function ppnd_array($elems) {
+		foreach($elems as $elem) { $this->ppnd($elem); }
+	}
 	private function attr_names() {
 		if(!isset($this->attrs)) { return false; }
 		else { foreach($this->attrs as $a) { $r[] = $a->aname; }
