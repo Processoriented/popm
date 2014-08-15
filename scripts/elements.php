@@ -31,35 +31,39 @@ function merge_de_array ( array $elems ) {
 
 class html_attr {
 	public $aname;
-	public $vals;
-	public $text;
+	public $val;
+	public $atext;
 	
 	public function __construct($attr, $val){
 		$this->aname = $attr;
-		$this->add_val($val);
+		$this->val = $val;
 		$this->set_text();
 	}
-	public function add_val($val) {
-		if(chk_array($val)) { 
-			$this->add_vals($val);
-		} elseif(!$this->chk_in_vals($val)) {
-			$this->vals[] = $val;
-			$this->set_text();
-		}		
-	}
-	private function add_vals($values) {
-		foreach($values as $val) { $this->add_val($val); }
-	}
-	private function chk_in_vals($val) {
-		if(!isset($this->vals)) { return false; }
-		elseif(!in_array($val,$this->vals)) { return false; }
-		return true;
-	}
-	private function set_text() {
+	protected function set_text() {
 		$rtn = $this->aname . '="';
-		$rtn = $rtn . implode(' ', $this->vals);
+		$rtn = $rtn . $this->val;
 		$rtn = rtrim($rtn) . '"';
-		$this->text = $rtn;
+		$this->atext = $rtn;
+	}
+}
+class html_cls_attr extends html_attr {
+	public $classes;
+	public function __construct() {
+		$cls = func_get_args();
+		$this->classes = $cls;
+		parent::__construct('class', implode($this->classes, ' '));
+	}
+	public function add_classes() {
+		$cls = func_get_args();
+		$this->classes = array_merge($this->classes, $cls);
+		$this->val = implode($this->classes, ' ');
+		$this->set_text();
+	}
+	public function rm_classes() {
+		$cls = func_get_args();
+		$this->classes = array_diff($this->classes, $cls);
+		$this->val = implode($this->classes, ' ');
+		$this->set_text();		
 	}
 }
 class dom_element {
@@ -79,9 +83,17 @@ class dom_element {
 		$this->set_html();
 	}
 	public function add_attr($attr) {
-		if (chk_array($attr)) { $this->add_attrs($attr); }
-		else { if(!$this->chk_in_attrs($attr)) { $this->attrs[] = $attr; }
-		$this->set_html(); }	
+		if (chk_array($attr)) { 
+			$this->add_attrs($attr); 
+		} elseif(!$this->chk_in_attrs($attr)) { 
+			$this->attrs[] = $attr; 
+		} elseif(is_a($attr, 'html_cls_attr')) {
+			$ca = $this->get_attr_by_name('class');
+			foreach($attr->classes as $c) {
+				$ca->add_classes($c);
+			}
+		}
+		$this->set_html();
 	}
 	private function add_attrs($attrs) {
 		foreach($attrs as $a) { $this->add_attr($a); }
@@ -118,33 +130,33 @@ class dom_element {
 		return false;
 	}
 	public function get_id() {
-		if(!$ida = get_attr_by_name('id')) { return false; }
-		else { return implode($ida->vals); } 
+		if(!$ida = $this->get_attr_by_name('id')) { return false; }
+		else { return $ida->val; } 
 	}
 	public function get_class_vals() {
-		if(!$cls = get_attr_by_name('class')) { return false; }
-		else { return $cls->vals; } 
+		if(!$cls = $this->get_attr_by_name('class')) { return false; }
+		else { return $cls->classes; } 
 	}
 	public function remove_class($cls_name) {
-		if($cla = get_attr_by_name('class')) {
-			if(!($k = array_search($cls_name, $cla->vals)) === false) {
-				unset($cla->vals[$k]);
-			}
+		if($cla = $this->get_attr_by_name('class')) {
+			$cla->rm_classes($cls_name);
 		}
 	}
 	private function chk_in_attrs($a) {
-		if(!isset($this->attrs)) { return false; }
-		elseif(!in_array($a->aname, $this->attr_names())) { return false; }
-		else {
-			if(!$cas = $this->get_attr_by_name($a->aname)) { return false; }
-			else { foreach($a->vals as $v) { 
-				foreach($cas as $ca) {
-					if(in_array($v, $ca->vals)) { return true; }}}}}
+		// Are any attributes set for this element?
+		if(!isset($this->attrs)) { 
+			return false; 
+		} elseif(!in_array($a->aname, $this->attr_names())) { 
+			// Do any of the existing attributes have the same name as $a?
+			return false; 
+		} else {
+			return true;
+		}
 		return false;
 	}
 	private function attr_text() {
 		$rtn = '';
-		if (isset($this->attrs)) { foreach ($this->attrs as $a) { $rtn = $rtn . ' ' . $a->text; }}
+		if (isset($this->attrs)) { foreach ($this->attrs as $a) { $rtn = $rtn . ' ' . $a->atext; }}
 		return $rtn;
 	}
 	protected function is_void_elem() {
@@ -185,19 +197,19 @@ class sb_nav_li extends dom_element{
 		}
 		$t = $anchor->html_out . $hs;
 		parent::__construct('li',$t);
-		if($active == 1) { $this->add_attr(new html_attr('class','highlight')); }
+		if($active == 1) { $this->add_attr(new html_cls_attr('highlight')); }
 		$this->set_html();
 	}
 }
 class tab_nav_li extends dom_element{
 	public function __construct($anchor, $active = 0) {
 		parent::__construct('li', $anchor->html_out);
-		if($active == 1) { $this->add_attr(new html_attr('class','active')); }
+		if($active == 1) { $this->add_attr(new html_cls_attr('active')); }
 		$this->set_html();
 	}
 	public function toggle_active() {
 		if(!in_array('active',$this->get_class_vals())) { 
-			$this->add_attr(new html_attr('class','active')); 
+			$this->add_attr(new html_cls_attr('active')); 
 		} else { 
 			$this->remove_class('active'); 
 		}
@@ -211,7 +223,7 @@ class sb_nav_ul extends dom_element {
 			foreach($items as $i) { $t = $t . $i->html_out; }
 		} else { $t = $t . $items->html_out; }
 		$a[] = new html_attr('id',$id);
-		$a[] = new html_attr('class','biglist');
+		$a[] = new html_cls_attr('biglist');
 		parent::__construct('ul', $t, $a);
 		$this->set_html();		
 	}
@@ -231,18 +243,18 @@ class sb_nav_list_div extends dom_element {
 	public function __construct($list, $title){
 		$h = new dom_element('h3',$title);
 		$t = $h->html_out . $list->html_out;
-		parent::__construct('div', $t, new html_attr('class','bd'));
+		parent::__construct('div', $t, new html_cls_attr('bd'));
 		$this->set_html();
 	}
 }
 class sb_nav extends dom_element {
 	public function __construct($divs, $title) {
 		$h = new dom_element('h2', $title);
-		$hd = new dom_element('div', $h->html_out, new html_attr('class','hd'));
+		$hd = new dom_element('div', $h->html_out, new html_cls_attr('hd'));
 		$tb = (chk_array($divs)) ? merge_de_array($divs) : $divs->html_out;
 		$t = $hd->html_out . $tb;	
 
-		parent::__construct('div', $t, new html_attr('class','block'));
+		parent::__construct('div', $t, new html_cls_attr('block'));
 		$this->set_html();
 	}
 }
@@ -250,8 +262,8 @@ class block_p extends dom_element {
 	public function __construct($text, $id = NULL, $small = NULL, $gray = NULL) {
 		parent::__construct('p', $text);
 		if (isset($id)) { $this->add_attr(new html_attr('id',$id)); }
-		if (isset($small)) { $this->add_attr(new html_attr('class','small')); }
-		if (isset($gray)) { $this->add_attr(new html_attr('class','gray')); }
+		if (isset($small)) { $this->add_attr(new html_cls_attr('small')); }
+		if (isset($gray)) { $this->add_attr(new html_cls_attr('gray')); }
 		$this->set_html();
 	}
 }
@@ -260,7 +272,7 @@ class block_body extends dom_element {
 		$ps = (!isset($paras)) ? new block_p('') : $paras;
 		$pt = (!chk_array($paras)) ? $ps->html_out : merge_de_array($ps);
 		if(isset($title)) { $pt = '<h3>' . $title . '</h3>' . $pt; }
-		$ba[] = new html_attr('class','bd');
+		$ba[] = new html_cls_attr('bd');
 		if(isset($id)) { $ba[] = new html_attr('id', $id); }
 		parent::__construct('div',$pt, $ba);
 		$this->set_html();
@@ -269,11 +281,11 @@ class block_body extends dom_element {
 class block extends dom_element {
 	public function __construct($id, $body = NULL, $title = '', $visible = 1) {
 		$h = new dom_element('h2',$title, new html_attr('id', $id . '_title'));
-		$hdd = new dom_element('div',$h->html_out, new html_attr('class','hd'));
+		$hdd = new dom_element('div',$h->html_out, new html_cls_attr('hd'));
 		if(!isset($body)) { $body = new block_body(); }
 		$blka[] = new html_attr('id',$id);
-		$blka[] = new html_attr('class','block');
-		if ($visible == 0) { $blka[] = new html_attr('class','bh'); }
+		$blka[] = new html_cls_attr('block');
+		if ($visible == 0) { $blka[] = new html_cls_attr('bh'); }
 		parent::__construct('div',$hdd->html_out . $body->html_out, $blka);		
 		$this->set_html();
 	}
@@ -288,16 +300,16 @@ class tabbed_block extends dom_element {
 				$li[] = new tab_nav_li($a, 1);
 			} else {
 				$li[] = new tab_nav_li($a);
-				$tab->add_attr(new html_attr('class','bh'));
+				$tab->add_attr(new html_cls_attr('bh'));
 			} 
 			$body = $body . $tab->html_out;
 		}
 		$nul = new tab_nav_ul($li);
 		$h = new dom_element('h2',$title, new html_attr('id', $id . '_title'));
-		$hdd = new dom_element('div',$h->html_out . $nul->html_out, new html_attr('class','hd'));
+		$hdd = new dom_element('div',$h->html_out . $nul->html_out, new html_cls_attr('hd'));
 		$blka[] = new html_attr('id',$id);
-		$blka[] = new html_attr('class','block');
-		$blka[] = new html_attr('class','tabs');
+		$blka[] = new html_cls_attr('block');
+		$blka[] = new html_cls_attr('tabs');
 		parent::__construct('div', $hdd->html_out . $body, $blka);
 		$this->set_html();
 	}
@@ -305,7 +317,7 @@ class tabbed_block extends dom_element {
 class sidebar extends dom_element {
 	public function __construct($u_block, $nav = NULL, $l_block = NULL) {
 		$a[] = new html_attr('id', 'sidebar');
-		$a[] = new html_attr('class', 'yui-b');
+		$a[] = new html_cls_attr('yui-b');
 		$t = $u_block->html_out;
 		if(isset($nav)) { $t = $t . $nav->html_out; }
 		if(isset($l_block)) { $t = $t . $l_block->html_out; }
@@ -321,7 +333,7 @@ class frm_input extends dom_element {
 		$name = (isset($name)) ? $name : $rid;
 		$la[] = new html_attr('for', $rid);
 		if(isset($lid)) { $la[] = new html_attr('id', $lid); }
-		if(isset($lcls)) { $la[] = new html_attr('class', $lcls); }
+		if(isset($lcls)) { $la[] = new html_cls_attr($lcls); }
 		if(isset($lbl)) { 
 			$l = new dom_element('label', $lbl, $la);
 			$this->label = $l;		

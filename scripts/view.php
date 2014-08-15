@@ -3,6 +3,7 @@
 require_once 'app_config.php';
 require_once 'authorize.php';
 require_once 'elements.php';
+require_once 'database_connection.php';
 
 define("SUCCESS_MESSAGE", "notice");
 define("ERROR_MESSAGE", "error");
@@ -70,7 +71,7 @@ EOD;
 		if ($title == 'User Signup') { echo '<li class="active">'; } else { echo '<li>'; }
 		echo '<a href="signup.php" id="signup_link" class="has_img" >Signup</a></li>';
 	} else {
-		if ($title == 'Project') { echo '<li class="active">'; } else { echo '<li>'; }
+		if ($title == 'POPM Projects') { echo '<li class="active">'; } else { echo '<li>'; }
 		echo '<a href="project.php" id="proj_link" class="has_img" >Projects</a></li>';		
 		if ($title == 'Resource') { echo '<li class="active">'; } else { echo '<li>'; }
 		echo '<a href="resource.php" id="res_link" class="has_img" >Resources</a></li>';		
@@ -113,11 +114,11 @@ function display_messages($success_msg = NULL, $error_msg = NULL, $warn_msg = NU
 }
 
 function display_message($msg, $msg_type) {
-	$pcls[] = new html_attr('class', 'alert');
-	$pcls[] = new html_attr('class', $msg_type);	
+	$pcls[] = new html_cls_attr('alert');
+	$pcls[] = new html_cls_attr($msg_type);	
 	$msg_p = new dom_element('p', $msg, $pcls);
-	$msg_b = new dom_element('div', $msg_p->html_out, new html_attr('class', 'bd'));
-	$msg_d = new dom_element('div', $msg_b->html_out, new html_attr('class', 'block'));
+	$msg_b = new dom_element('div', $msg_p->html_out, new html_cls_attr('bd'));
+	$msg_d = new dom_element('div', $msg_b->html_out, new html_cls_attr('block'));
 	echo $msg_d->html_out;
 }
 
@@ -130,6 +131,31 @@ function sign_in() {
 	return new block('user_sign_in', $fb, 'Login to Process Oriented Project Management');
 }
 
+function project_nav() {
+	if (!isset($_SESSION['user_id'])) { 
+		return false;
+	} else {
+		$aa[] = new nav_a('New Project','newProj');
+		$aa[] = new nav_a('View All Projects','view_all_Proj');
+		$aa[] = new nav_a('Dashboard','Proj_dash');
+		foreach($aa as $ai) { $al[] = new sb_nav_li($ai); }
+		$asw = new sb_nav_ul($al, 'action-switcher');
+		$d[] = new sb_nav_list_div($asw, 'Actions');
+		
+		try {
+			$conn = proj_data::getInstance();
+			$projs = $conn->getNavData($_SESSION['user_id']);
+			foreach($projs as $proj) { $pa[] = new nav_a($proj['title'], 'proj_' . $proj['id']); }
+			foreach($pa as $pi) { $plst[] = new sb_nav_li($pi); }
+			$upr = new sb_nav_ul($plst,'uLstPr');
+			$d[] = new sb_nav_list_div($upr, 'Projects');
+		} catch(Exception $e) {
+			// nothing here
+		}
+		return new sb_nav($d,'Projects');
+	}
+}
+
 function about_popm() {
 	$p[] = new block_p('This project is based on the idea that many of the processes involved in managing a project can be automated.');
 	$p[] = new block_p('Figuring out whether a meeting is needed, who needs to attend the meeting, and what they need to contribute is a repetitive task that lends itself well to automation.  Likewise, meeting minutes, reminders, and other communications to all kinds of stakeholders should not be a manual task because it involves the same steps every time.');
@@ -139,11 +165,17 @@ function about_popm() {
 }
 function display_sidebar($title) {
 	$abl = about_popm();
+	error_log($abl->html_out);
 	if (!isset($_SESSION['user_id'])) {
 		$sib = sign_in();
 		$sdbr = new sidebar($sib, NULL, $abl);
-	} else { $sdbr = new sidebar($abl); }
-    
+	} elseif($title == 'POPM Projects') { 
+		$srb = new block('sel_rec', NULL, '', 0);
+		$sn = 	project_nav();
+		$sdbr = new sidebar($srb, $sn, $abl); 
+	} else {
+		$sdbr = new sidebar($abl);
+	}    
     echo $sdbr->html_out;
 }
 
@@ -151,21 +183,21 @@ function display_footer() {
     echo "\t</div>\n";
     $sa = new dom_element('a','Processoriented.Guru', new html_attr('href','http://Processoriented.Guru'));
     $twaa[] = new html_attr('href','https://twitter.com/popm_guru');
-    $twaa[] = new html_attr('class','twitter-follow-button');
+    $twaa[] = new html_cls_attr('twitter-follow-button');
     $twaa[] = new html_attr('data-show-count','false');
     $twa = new dom_element('a',' Follow @popm_guru',$twaa);
     $tws = new dom_element('script',"!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');");
     $ti = new dom_element('li',$twa->html_out . $tws->html_out);
     $tmaa[] = new html_attr('href','https://twitter.com/intent/tweet?screen_name=popm_guru');
-    $tmaa[] = new html_attr('class',"twitter-mention-button");
+    $tmaa[] = new html_cls_attr("twitter-mention-button");
     $tmaa[] = new html_attr('data-related',"popm_guru");
     $tma = new dom_element('a','Tweet to @popm_guru', $tmaa);
     $tms = new dom_element('script',"!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');");
     $tmi = new dom_element('li',$tma->html_out . $tms->html_out);
     $socll = new dom_element('ul', $ti->html_out . $tmi->html_out);
     $socl = new dom_element('div', $socll->html_out, new html_attr('id', 'social'));
-    $cd = new dom_element('div',NULL,new html_attr('class','clear'));
-    $ftr_p = new dom_element('p', 'Copyright &copy; 2014 ' . $sa->html_out, new html_attr('class', 'inner'));
+    $cd = new dom_element('div',NULL,new html_cls_attr('clear'));
+    $ftr_p = new dom_element('p', 'Copyright &copy; 2014 ' . $sa->html_out, new html_cls_attr('inner'));
     $ftr_d = new dom_element('div', $socl->html_out . $cd->html_out . $ftr_p->html_out, new html_attr('id','ft'));
 	echo $ftr_d->html_out;
 	echo '</div>';

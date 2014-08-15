@@ -3,7 +3,7 @@
 	require_once 'database_connection.php';
 	require_once 'elements.php';
 	
-
+/*
 	$conn = proj_data::getInstance();
 		
 			
@@ -19,6 +19,7 @@
 	$before = sizeof($types);
 	$results->free();
 	$after = sizeof($types);
+	*/
 ?>
 <!DOCTYPE html>
 <html lang="US-en">
@@ -29,6 +30,7 @@
 	<body>
 		
 <?php
+/*
 	$ibp[] = new block_p('This is a test paragraph','fst');
 	$ibp[] = new block_p('This is a different test paragraph','scd');
 	$bb = new block_body($ibp);
@@ -61,7 +63,16 @@
 
 	$sdbr = new sidebar($ib, $n);
 	echo $sdbr->html_out;
+*/
+	$tst_st = 'string';
+	//$tst_ar = (array)$tst_st;
+	echo '<p>' . $tst_st . '</p>';
+	function foo() {
+		return func_get_args();
+	}
+	$bar = explode(' ', 'helloworld');
 	
+	echo '<p>' . var_dump($bar) . '</p>';
 ?>
 	</body>
 </html>
