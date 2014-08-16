@@ -12,7 +12,7 @@
 			<li><a href="#" title="meetings">Meetings</a></li>
 			<li><a href="#" title="deliverables">Deliverables</a></li>
 			<li><a href="#" title="issues">Issues</a></li>
-			<li><a href="#" title="tasks">Tasks</a></li>
+			<li class="bh" ><a href="#" title="tasks">Tasks</a></li>
 		</ul>
 		<div class="clear"></div>
 	</div>

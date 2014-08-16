@@ -165,7 +165,6 @@ function about_popm() {
 }
 function display_sidebar($title) {
 	$abl = about_popm();
-	error_log($abl->html_out);
 	if (!isset($_SESSION['user_id'])) {
 		$sib = sign_in();
 		$sdbr = new sidebar($sib, NULL, $abl);

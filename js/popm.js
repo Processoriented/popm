@@ -20,4 +20,8 @@ $(document).ready(function(){
 		$(this).parents().filter('form').find('#tm-role').val(
 			$(this).parents().filter('tr').children().eq(1).text());
 	});
+	$('#sb_nav a').click(function(e){
+		$('#sb_nav li.highlight').removeClass('highlight');
+		$(this).parent().addClass('highlight');
+	});
 });

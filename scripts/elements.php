@@ -175,7 +175,10 @@ class nav_a extends dom_element {
 	public function __construct($caption, $title = NULL, $href = '#') {
 		parent::__construct('a',$caption);
 		$a[] = new html_attr('href',$href);	
-		if(isset($title)) { $a[] = new html_attr('title',$title); }
+		if(isset($title)) { 
+			$a[] = new html_attr('title',$title);
+			$a[] = new html_attr('id', $title);
+		}
 		$this->add_attr($a);
 		$this->set_html();
 	}
@@ -253,8 +256,9 @@ class sb_nav extends dom_element {
 		$hd = new dom_element('div', $h->html_out, new html_cls_attr('hd'));
 		$tb = (chk_array($divs)) ? merge_de_array($divs) : $divs->html_out;
 		$t = $hd->html_out . $tb;	
-
-		parent::__construct('div', $t, new html_cls_attr('block'));
+		$a[] = new html_cls_attr('block');
+		$a[] = new html_attr('id', 'sb_nav');
+		parent::__construct('div', $t, $a);
 		$this->set_html();
 	}
 }
