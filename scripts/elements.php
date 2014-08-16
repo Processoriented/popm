@@ -186,9 +186,11 @@ class nav_a extends dom_element {
 class hidden_span extends dom_element {
 	//creates a hidden span for storing information that will be needed by javascript navigation routines
 	
-	public function __construct($text, $id, $cls = NULL) {
-		parent::__construct('span',$text, new html_attr('id',$id));
-		if(isset($cls)) { $this->add_attr($cls); }
+	public function __construct($text, $id = NULL, $cls = NULL) {
+		$a[] = new html_cls_attr('bh');
+		if(isset($cls)) { $a[0]->add_classes($cls); }
+		if(isset($id)) { $a[] = new html_attr('id',$id); }
+		parent::__construct('span',$text, $a);
 		$this->set_html();
 	}
 }

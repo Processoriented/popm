@@ -145,8 +145,11 @@ function project_nav() {
 		try {
 			$conn = proj_data::getInstance();
 			$projs = $conn->getNavData($_SESSION['user_id']);
-			foreach($projs as $proj) { $pa[] = new nav_a($proj['title'], 'proj_' . $proj['id']); }
-			foreach($pa as $pi) { $plst[] = new sb_nav_li($pi); }
+			foreach($projs as $proj) { 
+				$pa = new nav_a($proj['title'], 'proj_' . $proj['id']);
+				$pinfo = new hidden_span($proj['description']); 
+				$plst[] = new sb_nav_li($pa,$pinfo);
+			}
 			$upr = new sb_nav_ul($plst,'uLstPr');
 			$d[] = new sb_nav_list_div($upr, 'Projects');
 		} catch(Exception $e) {

@@ -1,22 +1,41 @@
 <?php
 	require_once 'scripts/view.php';
+
+	$error_message = isset($_REQUEST['error_message']) ? $_REQUEST['error_message'] : NULL;
+	$success_message = isset($_REQUEST['success_message']) ? $_REQUEST['success_message'] : NULL;
+	$warning_message = isset($_REQUEST['warning_message']) ? $_REQUEST['warning_message'] : NULL;
 	
-	display_pagetop("POPM Projects",NULL,NULL,NULL,NULL,NULL);
+	display_pagetop("POPM Projects",NULL,$success_message, $error_message, $warning_message);
 ?>
 <!-- Basic block with spaced tabs -->
-<div class="block tabs spaces">
+<div id="proj_expl" class="block tabs spaces">
 	<div class="hd">
 		<ul id="tab-switcher">
-			<li class="active"><a href="#" title="overview">Overview</a></li>
-			<li><a href="#" title="planning">Planning</a></li>
-			<li><a href="#" title="meetings">Meetings</a></li>
-			<li><a href="#" title="deliverables">Deliverables</a></li>
-			<li><a href="#" title="issues">Issues</a></li>
-			<li class="bh" ><a href="#" title="tasks">Tasks</a></li>
+			<li id="pDashTab" class="active genTab"><a href="#" title="dashboard">Dashboard</a></li>
+			<li id="pViewTab" class="genTab"><a href="#" title="view_all">View All</a></li>
+			<li id="pNewTab" class="genTab"><a href="#" title="add_new">New Project</a></li>
+			<li id="stdft" class="speTab bh"><a href="#" title="overview">Overview</a></li>
+			<li class="speTab bh"><a href="#" title="planning">Planning</a></li>
+			<li class="speTab bh"><a href="#" title="meetings">Meetings</a></li>
+			<li class="speTab bh"><a href="#" title="deliverables">Deliverables</a></li>
+			<li class="speTab bh"><a href="#" title="issues">Issues</a></li>
+			<li class="speTab bh"><a href="#" title="tasks">Tasks</a></li>
 		</ul>
 		<div class="clear"></div>
 	</div>
-	<div id="overview" class="tab-content bd">
+	<div id="dashboard" class="tab-content bd">
+		<h2>Project Dashboard</h2>
+		<p>Placeholder for the Project Dashboard<p>
+	</div>
+	<div id="view_all" class="tab-content bd bh">
+		<h2>All Projects</h2>
+		<p>Placeholder for View All Projects<p>
+	</div>
+	<div id="add_new" class="tab-content bd bh">
+		<h2>Add New Project</h2>
+		<p>Placeholder for Add New<p>
+	</div>
+	<div id="overview" class="tab-content bd bh">
 		<h2 id="ov_Title">Create POPM Site</h2>
 		<p id="ov_Desc">This project tracks the creation of the POPM Site.</p>
 		<hr>
