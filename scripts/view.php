@@ -43,7 +43,9 @@ function display_head($page_title = "", $embedded_javascript = NULL) {
     <link rel="stylesheet" href="css/yuiapp.css" type="text/css">
     <link id="theme" rel="stylesheet" href="css/green.css" type="text/css">	
     <link href="css/jquery.validate.password.css" rel="stylesheet" />
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
     <script src="js/jquery-1.11.1.min.js"></script>
+	<script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
     <script src="js/popm.js"></script>
     <script src="js/jquery.validate.min.js"></script>
     <script src="js/jquery.validate.password.js"></script>
@@ -135,9 +137,9 @@ function project_nav() {
 	if (!isset($_SESSION['user_id'])) { 
 		return false;
 	} else {
-		$aa[] = new nav_a('New Project','newProj');
-		$aa[] = new nav_a('View All Projects','view_all_Proj');
-		$aa[] = new nav_a('Dashboard','Proj_dash');
+		$aa[] = new nav_a('New Project','pNew');
+		$aa[] = new nav_a('View All Projects','pView');
+		$aa[] = new nav_a('Dashboard','pDash');
 		foreach($aa as $ai) { $al[] = new sb_nav_li($ai); }
 		$asw = new sb_nav_ul($al, 'action-switcher');
 		$d[] = new sb_nav_list_div($asw, 'Actions');

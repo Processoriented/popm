@@ -1,9 +1,49 @@
 <?php
 	require_once 'scripts/view.php';
+	require_once 'scripts/database_connection.php';
+	require_once 'scripts/authorize.php';
+	
+	if (!isset($_SESSION)) { session_start(); }
 
 	$error_message = isset($_REQUEST['error_message']) ? $_REQUEST['error_message'] : NULL;
 	$success_message = isset($_REQUEST['success_message']) ? $_REQUEST['success_message'] : NULL;
 	$warning_message = isset($_REQUEST['warning_message']) ? $_REQUEST['warning_message'] : NULL;
+	
+	authorize_user();
+	
+	if(isset($_POST['pTitle'])) {
+		//create dB connection
+		$conn = new ConnectdB();
+		$conn->connect();
+		
+		//Create Variables
+		$pt = $conn->my_conn->real_escape_string(trim($_POST['pTitle']));
+		$ps = $conn->my_conn->real_escape_string(trim($_POST['pStart']));
+		$pd = $conn->my_conn->real_escape_string(trim($_POST['pDesc']));
+		$uid = $_SESSION['user_id'];
+		//Insert Project
+		$q = sprintf("INSERT INTO project (title,start_date,description,manager_id) VALUES ('%s','%s','%s',%d);", $pt, $ps, $pd, $uid);
+		error_log('Insert Statement: ' . $q);
+		$conn->my_conn->query($q);
+		$pid = $conn->my_conn->insert_id;
+		error_log('Insert Id: ' . $pid);
+		
+		//Lookup Resource ID
+		$ridq = sprintf("SELECT id FROM resource WHERE user_id = %d;",$uid);
+		$results = $conn->my_conn->query($ridq);
+		if ($results->num_rows > 0) {
+			while($result = $results->fetch_assoc()) {
+				$rid[] = $result['id'];
+			}
+		}
+		
+		$prq = sprintf("INSERT INTO project_resource (project_id,resource_id,role_type_id,role_level_id) VALUES (%d,%d,1,2);", $pid, $rid[0]);
+		$conn->my_conn->query($prq);
+		
+		$conn->close();
+		
+	}
+	
 	
 	display_pagetop("POPM Projects",NULL,$success_message, $error_message, $warning_message);
 ?>
@@ -33,7 +73,24 @@
 	</div>
 	<div id="add_new" class="tab-content bd bh">
 		<h2>Add New Project</h2>
-		<p>Placeholder for Add New<p>
+		<form id="new_proj_frm" action="project.php" method = "POST">
+			<p>
+				<label for="pTitle">Project Title:</label>
+				<input type="text" name="pTitle" id="pTitle" size="20" />
+			</p>
+			<p>
+				<label for="pStart">Start Date:</label>
+				<input type="text" name="pStart" id="pStart" class="datepicker" />
+			</p>
+			<p>
+				<label for="pDesc">Project Description</label>
+				<textarea class="text" name="pDesc" id="pDesc" rows="6" cols="60"></textarea>
+				<span class="info">Enter a short summary of the project here.</span>
+			</p>
+			<p>
+				<input type="submit" value="Create Project" />
+			</p>
+		</form>
 	</div>
 	<div id="overview" class="tab-content bd bh">
 		<h2 id="ov_Title">Create POPM Site</h2>
@@ -158,7 +215,8 @@
 					<input type="text" class="text" name="test6" id="test6" value="Dude, it's like totally awesome.">
 					<span class="info">Ex: some more text</span>
 				</p>
-				<p><label for="test7">Text area</label>
+				<p>
+					<label for="test7">Text area</label>
 					<textarea class="text" name="test7" id="test7" rows="4" cols="40"></textarea>
 					<span class="info">Lots of text can go in here</span>
 				</p>

@@ -112,7 +112,7 @@ class ConnectdB {
     }
     
     public function close() {
-    	mysqli_close($my_conn);
+    	mysqli_close($this->my_conn);
     }
 	
 }

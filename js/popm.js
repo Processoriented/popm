@@ -30,9 +30,11 @@ $(document).ready(function(){
 		$('.speTab').addClass('bh');
 		$('.genTab').removeClass('bh');
 		$('#tab-switcher li.active').removeClass('active');
-		$('#gtdft').addClass('active');
+		var sel = "#" + ($(this).attr('title')) + "Tab"; 
+		$(sel).addClass('active');
 		$(".tab-content").addClass('bh');
-		$('#dashboard').removeClass('bh');
+		var sels = "#" + $(sel).children().eq(0).attr('title') + "";
+		$(sels).removeClass('bh');
 	});
 	$('#uLstPr a').click(function(e){
 		$('#sel_rec').removeClass('bh');
@@ -45,4 +47,5 @@ $(document).ready(function(){
 		$(".tab-content").addClass('bh');
 		$('#overview').removeClass('bh');
 	});
+	$('.datepicker').datepicker();
 });
