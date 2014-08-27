@@ -74,14 +74,19 @@
 	<div id="add_new" class="tab-content bd bh">
 		<h2>Add New Project</h2>
 		<form id="new_proj_frm" action="project.php" method = "POST">
-			<p>
-				<label for="pTitle">Project Title:</label>
-				<input type="text" name="pTitle" id="pTitle" size="20" />
-			</p>
-			<p>
-				<label for="pStart">Start Date:</label>
-				<input type="text" name="pStart" id="pStart" class="datepicker" />
-			</p>
+			<div class="column left">
+				<p>
+					<label for="pTitle">Project Title:</label>
+					<input type="text" name="pTitle" id="pTitle" size="20" />
+				</p>
+			</div>
+			<div class="column right">
+				<p>
+					<label for="pStart">Start Date:</label>
+					<input type="text" name="pStart" id="pStart" class="datepicker" />
+				</p>
+			</div>
+			<div class="clear"></div>
 			<p>
 				<label for="pDesc">Project Description</label>
 				<textarea class="text" name="pDesc" id="pDesc" rows="6" cols="60"></textarea>
