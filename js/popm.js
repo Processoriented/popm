@@ -1,9 +1,9 @@
 $(document).ready(function(){
-	$('#tab-switcher a').click(function(e){
-		$('#tab-switcher li.active').removeClass('active');
+	$('.tab-switcher a').click(function(e){
+		$(this).parent().parent().children().filter('li.active').removeClass('active');
 		$(this).parent().addClass('active');
 		var sel = "#" + ($(this).attr('title')) + "";
-		$(".tab-content").addClass('bh');
+		$(this).parent().parent().parent().parent().children() .filter(".tab-content").addClass('bh');
 		$(sel).removeClass('bh');
 	});
 	$('.vt-edit, .vt-insert').click(function(e){
@@ -62,4 +62,12 @@ function drop(ev) {
     ev.preventDefault();
     var data = ev.dataTransfer.getData("Text");
     ev.target.appendChild(document.getElementById(data));
+}
+
+function drop2list(ev) {
+    ev.preventDefault();
+    var listItem = document.createElement("li");
+    var data = ev.dataTransfer.getData("Text");
+    listItem.appendChild(document.getElementById(data));
+    ev.target.appendChild(document.getElementById(listItem));
 }

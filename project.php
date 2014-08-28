@@ -50,7 +50,7 @@
 <!-- Basic block with spaced tabs -->
 <div id="proj_expl" class="block tabs spaces">
 	<div class="hd">
-		<ul id="tab-switcher">
+		<ul class="tab-switcher">
 			<li id="pDashTab" class="active genTab"><a href="#" title="dashboard">Dashboard</a></li>
 			<li id="pViewTab" class="genTab"><a href="#" title="view_all">View All</a></li>
 			<li id="pNewTab" class="genTab"><a href="#" title="add_new">New Project</a></li>
@@ -79,6 +79,38 @@
 					<label for="pTitle">Project Title:</label>
 					<input type="text" name="pTitle" id="pTitle" size="20" />
 				</p>
+				<h3>Resource Selection</h3>
+				<div id="imp_rsc" class="block tabs spaces">
+					<div class="hd">
+						<ul class="tab-switcher">
+							<li id="ir-existing" class="active genTab"><a href="#" title="existing_rsx">Existing</a></li>
+							<li id="ir-new" class="genTab"><a href="#" title="new_rsx">New</a></li>
+							<li id="ir-import" class="genTab"><a href="#" title="import_rsx">Import</a></li>
+						</ul>
+						<div class="clear"></div>
+					</div>
+					<div id="existing_rsx" class="tab-content bd">
+						<p>Drag and Drop existing resource names to the Leadership slots to the left.</p>
+						<ul class="biglist" ondrop="drop2list(event)" ondragover="allowDrop(event)">
+							<li id="erPos1" class="ph"><div id="rid_1" draggable="true" ondragstart="drag(event)">Vincent Engler</div></li>
+							<li id="erPos2" class="ph"><div id="rid_2" draggable="true" ondragstart="drag(event)">Alina Estis</div></li>
+							<li id="erPos3" class="ph"><div id="rid_3" draggable="true" ondragstart="drag(event)">Matt Barfield</div></li>
+							<li id="erPos4" class="ph"><div id="rid_4" draggable="true" ondragstart="drag(event)">Romina Pliner</div></li>
+						</ul>
+					</div>
+					<div id="new_rsx" class="tab-content bd bh">
+						<p>Placeholder for add resource.</p>
+					</div>
+					<div id="import_rsx" class="tab-content bd bh">
+						<p>Placeholder for importing resources from social networking sites.</p>
+					</div>
+				</div>
+			</div>
+			<div class="column right">
+				<p>
+					<label for="pStart">Start Date:</label>
+					<input type="text" name="pStart" id="pStart" class="datepicker" />
+				</p>
 				<h3>Project Leadership</h3>
 				<dl class="biglist">
 					<dt>Executive Sponsor</dt>
@@ -87,20 +119,7 @@
 					<dd id="proj_man" class="ph" ondrop="drop(event)" ondragover="allowDrop(event)"> </dd>
 					<dt>Project Administrator</dt>
 					<dd id="proj_admn" class="ph" ondrop="drop(event)" ondragover="allowDrop(event)"> </dd>
-				</dl>
-			</div>
-			<div class="column right">
-				<p>
-					<label for="pStart">Start Date:</label>
-					<input type="text" name="pStart" id="pStart" class="datepicker" />
-				</p>
-				<h3>Existing Resources</h3>
-				<ul class="biglist">
-					<li id="erPos1" class="ph" ondrop="drop(event)" ondragover="allowDrop(event)"><div id="rid_1" draggable="true" ondragstart="drag(event)">Vincent Engler</div></li>
-					<li id="erPos2" class="ph" ondrop="drop(event)" ondragover="allowDrop(event)"><div id="rid_2" draggable="true" ondragstart="drag(event)">Alina Estis</div></li>
-					<li id="erPos3" class="ph" ondrop="drop(event)" ondragover="allowDrop(event)"><div id="rid_3" draggable="true" ondragstart="drag(event)">Matt Barfield</div></li>
-					<li id="erPos4" class="ph" ondrop="drop(event)" ondragover="allowDrop(event)"><div id="rid_4" draggable="true" ondragstart="drag(event)">Romina Pliner</div></li>
-				</ul>
+				</dl>				
 			</div>
 			<div class="clear"></div>
 			<p>
