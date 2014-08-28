@@ -79,12 +79,28 @@
 					<label for="pTitle">Project Title:</label>
 					<input type="text" name="pTitle" id="pTitle" size="20" />
 				</p>
+				<h3>Project Leadership</h3>
+				<dl class="biglist">
+					<dt>Executive Sponsor</dt>
+					<dd id="exec_spon" class="ph" ondrop="drop(event)" ondragover="allowDrop(event)"> </dd>
+					<dt>Project Manager</dt>
+					<dd id="proj_man" class="ph" ondrop="drop(event)" ondragover="allowDrop(event)"> </dd>
+					<dt>Project Administrator</dt>
+					<dd id="proj_admn" class="ph" ondrop="drop(event)" ondragover="allowDrop(event)"> </dd>
+				</dl>
 			</div>
 			<div class="column right">
 				<p>
 					<label for="pStart">Start Date:</label>
 					<input type="text" name="pStart" id="pStart" class="datepicker" />
 				</p>
+				<h3>Existing Resources</h3>
+				<ul class="biglist">
+					<li id="erPos1" class="ph" ondrop="drop(event)" ondragover="allowDrop(event)"><div id="rid_1" draggable="true" ondragstart="drag(event)">Vincent Engler</div></li>
+					<li id="erPos2" class="ph" ondrop="drop(event)" ondragover="allowDrop(event)"><div id="rid_2" draggable="true" ondragstart="drag(event)">Alina Estis</div></li>
+					<li id="erPos3" class="ph" ondrop="drop(event)" ondragover="allowDrop(event)"><div id="rid_3" draggable="true" ondragstart="drag(event)">Matt Barfield</div></li>
+					<li id="erPos4" class="ph" ondrop="drop(event)" ondragover="allowDrop(event)"><div id="rid_4" draggable="true" ondragstart="drag(event)">Romina Pliner</div></li>
+				</ul>
 			</div>
 			<div class="clear"></div>
 			<p>

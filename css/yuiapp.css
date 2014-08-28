@@ -148,6 +148,7 @@ ol.list, ul.list, dl.list { margin-left:2em; margin-bottom:1em; }
 ol.list li { list-style:decimal outside; }
 ul.list li { list-style:disc outside; }
 dl.list dd { margin-left:1em; }
+dd.ph { border: 1px solid black; min-height: 1em; }
 
 ul.biglist { margin-bottom:1em; }
 ul.biglist li { margin-top:-1px; border:1px solid #f0f0ee; border-width:1px 0 1px 0; }
