@@ -136,6 +136,17 @@ form .text { display:block; width:99%; border:1px solid #aaa; padding:0.3em; }
 form .column { width:48%; }
 form .left { float:left; }
 form .right { float:right; }
+fieldset {
+/* 
+	margin: 8px;
+ */
+	border: 1px solid silver;
+	padding: 8px;
+	border-radius: 4px;
+}
+legend {
+	padding: 2px;
+}
 
 /* Messages */
 .alert { padding:0.5em; text-align:center; }
