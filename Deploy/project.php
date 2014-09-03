@@ -77,7 +77,7 @@
 			<div class="column left">
 				<p>
 					<label for="pTitle">Project Title:</label>
-					<input type="text" name="pTitle" id="pTitle" size="30" />
+					<input type="text" name="pTitle" id="pTitle" size="20" />
 				</p>
 				<fieldset>
 					<legend>Project Leadership</legend>
@@ -94,34 +94,17 @@
 					<label for="pStart">Start Date:</label>
 					<input type="text" name="pStart" id="pStart" class="datepicker" />
 				</p>
-				<div class="bh">
-					<h3>Resource Selection</h3>
-					<div id="imp_rsc" class="block tabs spaces">
-						<div class="hd">
-							<ul class="tab-switcher">
-								<li id="ir-existing" class="active genTab"><a href="#" title="existing_rsx">Existing</a></li>
-								<li id="ir-new" class="genTab"><a href="#" title="new_rsx">New</a></li>
-								<li id="ir-import" class="genTab"><a href="#" title="import_rsx">Import</a></li>
-							</ul>
-							<div class="clear"></div>
-						</div>
-						<div id="existing_rsx" class="tab-content bd">
-							<p>Drag and Drop existing resource names to the Leadership slots to the left.</p>
-							<ul class="biglist" ondrop="drop2list(event)" ondragover="allowDrop(event)">
-								<li id="erPos1" class="ph"><div id="rid_1" draggable="true" ondragstart="drag(event)">Vincent Engler</div></li>
-								<li id="erPos2" class="ph"><div id="rid_2" draggable="true" ondragstart="drag(event)">Alina Estis</div></li>
-								<li id="erPos3" class="ph"><div id="rid_3" draggable="true" ondragstart="drag(event)">Matt Barfield</div></li>
-								<li id="erPos4" class="ph"><div id="rid_4" draggable="true" ondragstart="drag(event)">Romina Pliner</div></li>
-							</ul>
-						</div>
-						<div id="new_rsx" class="tab-content bd bh">
-							<p>Placeholder for add resource.</p>
-						</div>
-						<div id="import_rsx" class="tab-content bd bh">
-							<p>Placeholder for importing resources from social networking sites.</p>
-						</div>
+				<fieldset>
+					<legend>Project Team</legend>
+					<label for="add_mbr">Add Contributor:</label>
+					<input type="text" id="add_mbr" name="add_mbr" size="40" />
+					<button 
+					<div id="p_mbrs_div" class="bh">
+						<label for="p_mbrs">Project Contributors</label>
+						<select id="p_mbrs" name="p_mbrs" size="1" multiple="multiple" disabled>
+						</select>
 					</div>
-				</div>		
+				</fieldset>	
 			</div>
 			<div class="clear"></div>
 			<p>

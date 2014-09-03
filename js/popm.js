@@ -29,7 +29,7 @@ $(document).ready(function(){
 		$('#sel_rec').addClass('bh');
 		$('.speTab').addClass('bh');
 		$('.genTab').removeClass('bh');
-		$('#tab-switcher li.active').removeClass('active');
+		$('.tab-switcher li.active').removeClass('active');
 		var sel = "#" + ($(this).attr('title')) + "Tab"; 
 		$(sel).addClass('active');
 		$(".tab-content").addClass('bh');
